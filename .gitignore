@@ -8,6 +8,8 @@ _build/
 !.github
 !.mailmap
 !.weblate.json
+!.dockerignore
+!.env.example
 # compiled python files
 *.py[co]
 __pycache__/
@@ -28,6 +30,11 @@ odoo/addons/base/maintenance
 # generated for windows installer?
 install/win32/*.bat
 install/win32/meta.py
+
+# docker local dev
+/data/
+/filestore/
+docker-compose.override.yml
 
 # needed only when building for win32
 setup/win32/static/less/
