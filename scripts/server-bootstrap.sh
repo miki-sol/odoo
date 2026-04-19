@@ -34,7 +34,7 @@ ufw --force enable
 
 echo "==> clone repo"
 if [ ! -d "$APP_DIR/.git" ]; then
-    git clone --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
+    git clone --depth=1 --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
 else
     git -C "$APP_DIR" fetch origin "$BRANCH"
     git -C "$APP_DIR" checkout "$BRANCH"
