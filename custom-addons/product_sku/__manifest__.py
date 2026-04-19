@@ -2,6 +2,7 @@
     'name': 'Product SKU',
     'version': '19.0.1.0.0',
     'summary': 'Adds an integer SKU field to product templates.',
+    'author': 'miki-sol',
     'category': 'Inventory',
     'depends': ['product'],
     'data': [

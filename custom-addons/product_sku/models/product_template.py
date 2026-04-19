@@ -13,9 +13,10 @@ class ProductTemplate(models.Model):
         help='Unique numeric identifier used for Excel-based sale order line imports.',
     )
 
-    _sql_constraints = [
-        ('sku_unique', 'UNIQUE(sku)', 'SKU must be unique across all products.'),
-    ]
+    _sku_unique = models.Constraint(
+        'UNIQUE(sku)',
+        'SKU must be unique across all products.',
+    )
 
     @api.model
     def _default_sku(self):
