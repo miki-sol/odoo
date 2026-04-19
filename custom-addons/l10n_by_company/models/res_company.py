@@ -5,8 +5,16 @@ from odoo.exceptions import ValidationError
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
-    vat = fields.Char(string='УНП')
-    company_registry = fields.Char(string='Регистрационный № в ЕГР')
+    vat = fields.Char(
+        related='partner_id.vat',
+        string='УНП',
+        readonly=False,
+    )
+    company_registry = fields.Char(
+        related='partner_id.company_registry',
+        string='Регистрационный № в ЕГР',
+        readonly=False,
+    )
     iban = fields.Char(string='IBAN')
 
     @api.constrains('vat')

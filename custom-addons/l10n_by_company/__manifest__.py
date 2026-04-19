@@ -1,6 +1,6 @@
 {
     'name': 'Belarus: Company Fields',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'summary': 'Adapt res.company fields for Belarusian business (УНП, ЕГР, IBAN).',
     'author': 'miki-sol',
     'category': 'Accounting/Localizations',
