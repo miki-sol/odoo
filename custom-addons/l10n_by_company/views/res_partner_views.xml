@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_by" model="ir.ui.view">
+        <field name="name">res.partner.form.by</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- vat: show as УНП for companies, keep Налоговый ID for persons -->
+            <field name="vat" position="replace">
+                <field name="vat"
+                       string="УНП"
+                       placeholder="123456789"
+                       invisible="not is_company"/>
+                <field name="vat"
+                       string="Налоговый ID"
+                       placeholder="e.g. BE0477472701"
+                       invisible="is_company"/>
+            </field>
+
+            <!-- company_registry: rename for companies -->
+            <field name="company_registry" position="replace">
+                <field name="company_registry"
+                       string="Регистрационный № в ЕГР"
+                       placeholder="123456789"
+                       invisible="parent_id or not is_company"
+                       options="{'placeholder_field': 'company_registry_placeholder'}"/>
+                <field name="iban"
+                       placeholder="BY00XXXX0000000000000000000000"
+                       invisible="parent_id or not is_company"/>
+            </field>
+        </field>
+    </record>
+</odoo>
