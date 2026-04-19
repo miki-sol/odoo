@@ -1,5 +1,6 @@
 FROM python:3.12-slim-bookworm
 
+ARG TARGETARCH
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -34,11 +35,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     node-less \
     postgresql-client \
     zlib1g-dev \
- && curl -sLo /tmp/wkhtmltox.deb \
-    https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb \
- && apt-get install -y --no-install-recommends /tmp/wkhtmltox.deb \
- && rm -f /tmp/wkhtmltox.deb \
  && rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+    arch="${TARGETARCH:-$(dpkg --print-architecture)}"; \
+    url="https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_${arch}.deb"; \
+    curl -fsSLo /tmp/wkhtmltox.deb "$url"; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends /tmp/wkhtmltox.deb; \
+    rm -f /tmp/wkhtmltox.deb; \
+    rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -r odoo && useradd -r -g odoo -d /opt/odoo -s /bin/bash odoo
 
