@@ -1,4 +1,6 @@
 # Deploy / Run Guide
+<!-- deploy trigger: initial CI test -->
+
 
 Odoo 19.0 (кастомизированный форк) — запуск через Docker Compose.
 
