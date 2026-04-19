@@ -23,13 +23,14 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.
 apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-echo "==> firewall (ssh + odoo http)"
+echo "==> firewall (ssh + http/https for Caddy)"
 ufw --force reset
 ufw default deny incoming
 ufw default allow outgoing
 ufw allow 22/tcp
-ufw allow 8069/tcp
-ufw allow 8072/tcp
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw allow 443/udp
 ufw --force enable
 
 echo "==> clone repo"
@@ -61,11 +62,12 @@ else
     echo "    .env already exists — keeping it"
 fi
 
-echo "==> build & start stack"
+echo "==> build & start stack (with Caddy for HTTPS)"
 cd "$APP_DIR"
-docker compose up -d --build
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 
 echo ""
 echo "==> done"
-echo "    Odoo will be available at http://185.197.251.184:8069 in ~30-60s"
-echo "    Logs:  docker compose -f $APP_DIR/docker-compose.yml logs -f odoo"
+echo "    Odoo will be available at https://185-197-251-184.sslip.io in ~1-2 min"
+echo "    (Caddy needs a moment to obtain Let's Encrypt cert on first run)"
+echo "    Logs:  cd $APP_DIR && docker compose -f docker-compose.yml -f docker-compose.prod.yml logs -f"

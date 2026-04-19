@@ -1,0 +1,24 @@
+services:
+  odoo:
+    # On the server Odoo is NOT exposed publicly — Caddy proxies to it
+    # via the internal docker network. Remove host port bindings inherited
+    # from docker-compose.yml.
+    ports: !reset []
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - odoo
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  caddy-data:
+  caddy-config:

@@ -1,0 +1,11 @@
+185-197-251-184.sslip.io {
+    encode gzip
+
+    # Proxy everything to odoo (dev mode, workers=0, single port).
+    reverse_proxy odoo:8069 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}

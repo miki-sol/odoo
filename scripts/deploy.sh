@@ -7,6 +7,8 @@ set -euo pipefail
 APP_DIR="/opt/odoo-app"
 cd "$APP_DIR"
 
+COMPOSE=(docker compose -f docker-compose.yml -f docker-compose.prod.yml)
+
 OLD_HEAD=$(git rev-parse HEAD)
 
 echo "==> git fetch"
@@ -22,14 +24,14 @@ echo "==> updating $OLD_HEAD -> $NEW_HEAD"
 git reset --hard origin/19.0
 
 # Decide: rebuild vs restart.
-if git diff --name-only "$OLD_HEAD" "$NEW_HEAD" | grep -qE '^(Dockerfile|requirements\.txt|docker/entrypoint\.sh)$'; then
-    echo "==> Dockerfile/requirements changed — rebuilding image"
-    docker compose up -d --build
+if git diff --name-only "$OLD_HEAD" "$NEW_HEAD" | grep -qE '^(Dockerfile|requirements\.txt|docker/entrypoint\.sh|docker-compose(\.prod)?\.yml|Caddyfile)$'; then
+    echo "==> infra/deps changed — rebuilding stack"
+    "${COMPOSE[@]}" up -d --build
     docker image prune -f
 else
     echo "==> only code changed — restarting odoo (fast path)"
-    docker compose restart odoo
+    "${COMPOSE[@]}" restart odoo
 fi
 
 echo "==> deploy done"
-docker compose ps
+"${COMPOSE[@]}" ps
