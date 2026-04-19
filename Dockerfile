@@ -54,10 +54,8 @@ COPY requirements.txt /opt/odoo/requirements.txt
 RUN pip install --upgrade pip setuptools wheel \
  && pip install -r /opt/odoo/requirements.txt
 
-COPY . /opt/odoo
-
-RUN mkdir -p /opt/odoo/custom-addons /var/lib/odoo /etc/odoo \
- && chown -R odoo:odoo /opt/odoo /var/lib/odoo /etc/odoo
+RUN mkdir -p /var/lib/odoo /etc/odoo \
+ && chown -R odoo:odoo /var/lib/odoo /etc/odoo
 
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

@@ -33,8 +33,8 @@ services:
       ODOO_WORKERS: ${ODOO_WORKERS}
       ODOO_DEV_MODE: ${ODOO_DEV_MODE}
     volumes:
+      - ./:/opt/odoo
       - ./config/odoo.conf:/etc/odoo/odoo.conf.tmpl:ro
-      - ./custom-addons:/opt/odoo/custom-addons
       - filestore:/var/lib/odoo
 
 volumes:
