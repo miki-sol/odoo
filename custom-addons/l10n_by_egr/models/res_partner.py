@@ -3,7 +3,7 @@ from datetime import datetime, date
 
 import requests
 
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -59,7 +59,46 @@ class ResPartner(models.Model):
             )
 
     # ------------------------------------------------------------------ #
-    #  Public action                                                       #
+    #  Onchange — auto-fill on УНП entry                                  #
+    # ------------------------------------------------------------------ #
+
+    @api.onchange('vat')
+    def _onchange_vat_egr(self):
+        unp = (self.vat or '').strip()
+        if not (unp.isdigit() and len(unp) == 9):
+            return
+        try:
+            data = self._egr_fetch_all(unp)
+        except _EgrNotFound:
+            return {'warning': {
+                'title': _('ЕГР'),
+                'message': _(
+                    'По УНП %(unp)s данные в ЕГР не найдены. '
+                    'Проверьте правильность номера или введите данные вручную.',
+                    unp=unp,
+                ),
+            }}
+        except _EgrServiceError:
+            return {'warning': {
+                'title': _('ЕГР'),
+                'message': _('Сервис ЕГР временно недоступен. Попробуйте позже или введите данные вручную.'),
+            }}
+        except requests.Timeout:
+            return {'warning': {
+                'title': _('ЕГР'),
+                'message': _('Превышено время ожидания ответа от ЕГР.'),
+            }}
+        except requests.ConnectionError:
+            return {'warning': {
+                'title': _('ЕГР'),
+                'message': _('Не удалось подключиться к серверу ЕГР. Проверьте интернет-соединение.'),
+            }}
+        vals = self._egr_build_vals(data, unp)
+        for field, value in vals.items():
+            setattr(self, field, value)
+
+    # ------------------------------------------------------------------ #
+    #  Public action (button — manual re-fetch)                           #
     # ------------------------------------------------------------------ #
 
     def action_load_from_egr(self):
