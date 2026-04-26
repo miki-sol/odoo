@@ -47,6 +47,16 @@ class ResPartner(models.Model):
     egr_authority = fields.Char(string='Регистрирующий орган', readonly=True)
     egr_oked = fields.Char(string='ОКЭД', readonly=True)
     egr_sync_date = fields.Datetime(string='Последняя синхронизация с ЕГР', readonly=True)
+    egr_button_visible = fields.Boolean(
+        compute='_compute_egr_button_visible',
+    )
+
+    def _compute_egr_button_visible(self):
+        for partner in self:
+            vat = partner.vat or ''
+            partner.egr_button_visible = (
+                partner.is_company and vat.isdigit() and len(vat) == 9
+            )
 
     # ------------------------------------------------------------------ #
     #  Public action                                                       #

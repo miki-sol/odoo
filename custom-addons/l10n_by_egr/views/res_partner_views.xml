@@ -7,13 +7,13 @@
         <field name="arch" type="xml">
 
             <!-- Button in header, visible only for companies with 9-digit УНП -->
-            <xpath expr="//div[@name='button_box']" position="before">
+            <xpath expr="//sheet" position="before">
                 <header>
                     <button name="action_load_from_egr"
                             type="object"
                             string="Загрузить из ЕГР"
                             class="btn-primary"
-                            invisible="not is_company or not vat or len(vat) != 9 or not vat.isdigit()"/>
+                            invisible="not egr_button_visible"/>
                     <!-- EGR status badge -->
                     <field name="egr_status" widget="badge"
                            invisible="not egr_status"
@@ -22,6 +22,7 @@
                            decoration-warning="egr_status == '3'"/>
                 </header>
             </xpath>
+            <field name="egr_button_visible" invisible="1"/>
 
             <!-- EGR data block after the main info section -->
             <xpath expr="//page[@name='internal_notes']" position="before">
