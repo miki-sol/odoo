@@ -9,12 +9,12 @@
             <!-- Button in header, visible only for companies with 9-digit УНП -->
             <xpath expr="//sheet" position="before">
                 <header>
+                    <field name="egr_button_visible" invisible="1"/>
                     <button name="action_load_from_egr"
                             type="object"
                             string="Загрузить из ЕГР"
                             class="btn-primary"
                             invisible="not egr_button_visible"/>
-                    <!-- EGR status badge -->
                     <field name="egr_status" widget="badge"
                            invisible="not egr_status"
                            decoration-success="egr_status == '1'"
@@ -22,7 +22,6 @@
                            decoration-warning="egr_status == '3'"/>
                 </header>
             </xpath>
-            <field name="egr_button_visible" invisible="1"/>
 
             <!-- EGR data block after the main info section -->
             <xpath expr="//page[@name='internal_notes']" position="before">
