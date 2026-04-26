@@ -3,7 +3,7 @@ from datetime import datetime, date
 
 import requests
 
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -16,6 +16,14 @@ _STATUS_MAP = {
     '2': '2',
     '3': '3',
 }
+
+
+class _EgrNotFound(Exception):
+    pass
+
+
+class _EgrServiceError(Exception):
+    pass
 
 
 class ResPartner(models.Model):
@@ -52,20 +60,21 @@ class ResPartner(models.Model):
 
         try:
             data = self._egr_fetch_all(unp)
-        except requests.Timeout:
-            raise UserError(_('Превышено время ожидания ответа от ЕГР.'))
-        except requests.ConnectionError:
-            raise UserError(
-                _('Не удалось подключиться к серверу ЕГР. Проверьте интернет-соединение.')
-            )
-
-        if data is None:
+        except _EgrNotFound:
             raise UserError(
                 _(
                     'По УНП %(unp)s данные в ЕГР не найдены. '
                     'Проверьте правильность номера или введите данные вручную.',
                     unp=unp,
                 )
+            )
+        except _EgrServiceError:
+            raise UserError(_('Сервис ЕГР временно недоступен. Попробуйте позже или введите данные вручную.'))
+        except requests.Timeout:
+            raise UserError(_('Превышено время ожидания ответа от ЕГР.'))
+        except requests.ConnectionError:
+            raise UserError(
+                _('Не удалось подключиться к серверу ЕГР. Проверьте интернет-соединение.')
             )
 
         vals = self._egr_build_vals(data, unp)
@@ -86,20 +95,22 @@ class ResPartner(models.Model):
     #  API helpers                                                         #
     # ------------------------------------------------------------------ #
 
-    def _egr_get(self, method, unp):
+    def _egr_get(self, method, unp, required=False):
         url = f'{_EGR_BASE}/{method}/{unp}'
         resp = requests.get(url, timeout=_TIMEOUT, headers={'Accept': 'application/json'})
         if resp.status_code == 204:
+            if required:
+                raise _EgrNotFound()
             return None
         if resp.status_code != 200:
             _logger.warning('EGR %s → HTTP %s', url, resp.status_code)
+            if required:
+                raise _EgrServiceError()
             return None
         return resp.json()
 
     def _egr_fetch_all(self, unp):
-        short = self._egr_get('getShortInfoByRegNum', unp)
-        if short is None:
-            return None
+        short = self._egr_get('getShortInfoByRegNum', unp, required=True)
 
         names = self._egr_get('getJurNamesByRegNum', unp) or []
         address = self._egr_get('getAddressByRegNum', unp) or []
