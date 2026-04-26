@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_egr" model="ir.ui.view">
+        <field name="name">res.partner.form.egr</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Button in header, visible only for companies with 9-digit УНП -->
+            <xpath expr="//div[@name='button_box']" position="before">
+                <header>
+                    <button name="action_load_from_egr"
+                            type="object"
+                            string="Загрузить из ЕГР"
+                            class="btn-primary"
+                            invisible="not is_company or not vat or len(vat) != 9 or not vat.isdigit()"/>
+                    <!-- EGR status badge -->
+                    <field name="egr_status" widget="badge"
+                           invisible="not egr_status"
+                           decoration-success="egr_status == '1'"
+                           decoration-danger="egr_status == '2'"
+                           decoration-warning="egr_status == '3'"/>
+                </header>
+            </xpath>
+
+            <!-- EGR data block after the main info section -->
+            <xpath expr="//page[@name='internal_notes']" position="before">
+                <page name="egr_info" string="Сведения из ЕГР"
+                      invisible="not is_company">
+                    <group>
+                        <group string="Наименования">
+                            <field name="egr_full_name"/>
+                            <field name="egr_full_name_be"/>
+                            <field name="egr_firm_name"/>
+                            <field name="egr_entity_type"/>
+                        </group>
+                        <group string="Регистрация">
+                            <field name="egr_status"/>
+                            <field name="egr_reg_date"/>
+                            <field name="egr_excl_date" invisible="not egr_excl_date"/>
+                            <field name="egr_authority"/>
+                            <field name="egr_oked"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="egr_sync_date" string="Последняя синхронизация с ЕГР"/>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
