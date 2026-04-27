@@ -6,8 +6,7 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='internal_notes']" position="before">
-                <page name="egr_info" string="Сведения из ЕГР"
-                      invisible="not is_company">
+                <page name="egr_info" string="Сведения из ЕГР">
                     <group>
                         <group string="Наименования">
                             <field name="egr_full_name"/>
