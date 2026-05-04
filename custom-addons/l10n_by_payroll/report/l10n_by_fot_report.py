@@ -35,7 +35,7 @@ class L10nByFotReport(models.Model):
                     ps.id              AS id,
                     ps.period_id       AS period_id,
                     ps.employee_id     AS employee_id,
-                    e.department_id    AS department_id,
+                    v.department_id    AS department_id,
                     p.date_from        AS date_from,
                     p.date_to          AS date_to,
                     p.year             AS year,
@@ -51,5 +51,6 @@ class L10nByFotReport(models.Model):
                 FROM l10n_by_payslip ps
                 JOIN l10n_by_payroll_period p ON p.id = ps.period_id
                 JOIN hr_employee e ON e.id = ps.employee_id
+                LEFT JOIN hr_version v ON v.id = e.version_id
             )
         """)

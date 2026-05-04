@@ -65,10 +65,10 @@ class L10nByPayrollPeriod(models.Model):
     total_net = fields.Float(compute='_compute_totals', string='Итого к выплате')
     total_company_cost = fields.Float(compute='_compute_totals', string='Итого с расходами компании')
 
-    _sql_constraints = [
-        ('year_month_unique', 'unique(year, month)',
-         'Расчётный период за этот месяц уже существует.'),
-    ]
+    _year_month_unique = models.Constraint(
+        'unique(year, month)',
+        'Расчётный период за этот месяц уже существует.',
+    )
 
     @api.depends('year', 'month')
     def _compute_display_name(self):

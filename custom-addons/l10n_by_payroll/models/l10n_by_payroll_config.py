@@ -91,10 +91,10 @@ class L10nByPayrollConfig(models.Model):
 
     note = fields.Text(string='Примечание')
 
-    _sql_constraints = [
-        ('date_from_unique', 'unique(date_from)',
-         'Параметры с такой датой действия уже существуют.'),
-    ]
+    _date_from_unique = models.Constraint(
+        'unique(date_from)',
+        'Параметры с такой датой действия уже существуют.',
+    )
 
     @api.depends('date_from')
     def _compute_display_name(self):

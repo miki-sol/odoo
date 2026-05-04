@@ -64,10 +64,10 @@ class L10nByPayslip(models.Model):
     is_computed = fields.Boolean(readonly=True)
     move_id = fields.Many2one('account.move', string='Бухгалтерская проводка', readonly=True)
 
-    _sql_constraints = [
-        ('period_employee_unique', 'unique(period_id, employee_id)',
-         'Для сотрудника уже существует расчётный лист в этом периоде.'),
-    ]
+    _period_employee_unique = models.Constraint(
+        'unique(period_id, employee_id)',
+        'Для сотрудника уже существует расчётный лист в этом периоде.',
+    )
 
     @api.depends('period_id.display_name', 'employee_id.name')
     def _compute_display_name(self):
