@@ -51,6 +51,6 @@ class L10nByFotReport(models.Model):
                 FROM l10n_by_payslip ps
                 JOIN l10n_by_payroll_period p ON p.id = ps.period_id
                 JOIN hr_employee e ON e.id = ps.employee_id
-                LEFT JOIN hr_version v ON v.id = e.version_id
+                LEFT JOIN hr_version v ON v.id = e.current_version_id
             )
         """)
