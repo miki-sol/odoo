@@ -15,8 +15,8 @@
     'data': [
         'security/ir.model.access.csv',
         'data/l10n_by_payroll_config_data.xml',
-        'data/mail_template_data.xml',
         'report/payslip_report.xml',
+        'data/mail_template_data.xml',
         'report/l10n_by_fot_report_views.xml',
         'wizard/l10n_by_vacation_wizard_views.xml',
         'wizard/l10n_by_sickleave_wizard_views.xml',
