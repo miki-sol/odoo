@@ -6,6 +6,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">l10n_by_payroll.report_payslip</field>
         <field name="report_file">l10n_by_payroll.report_payslip</field>
+        <field name="print_report_name">'Payslip_%s_%s' % ((object.employee_id.name or '').replace(' ', '_'), object.period_id.display_name or '')</field>
         <field name="binding_model_id" ref="model_l10n_by_payslip"/>
         <field name="binding_type">report</field>
     </record>
