@@ -37,7 +37,7 @@
                 <field name="department_id"/>
                 <field name="year"/>
                 <filter name="approved" string="Утверждённые" domain="[('state', '=', 'approved')]"/>
-                <group expand="1" string="Группировать по">
+                <group>
                     <filter name="group_dep" string="Подразделение" context="{'group_by': 'department_id'}"/>
                     <filter name="group_year" string="Год" context="{'group_by': 'year'}"/>
                     <filter name="group_month" string="Месяц" context="{'group_by': 'month'}"/>
