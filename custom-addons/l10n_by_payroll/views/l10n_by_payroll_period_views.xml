@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_by_payroll_period_list" model="ir.ui.view">
+        <field name="name">l10n.by.payroll.period.list</field>
+        <field name="model">l10n.by.payroll.period</field>
+        <field name="arch" type="xml">
+            <list string="Расчётные периоды" decoration-success="state == 'approved'"
+                  decoration-info="state == 'computed'">
+                <field name="display_name"/>
+                <field name="year"/>
+                <field name="month"/>
+                <field name="payslip_count"/>
+                <field name="total_gross"/>
+                <field name="total_net"/>
+                <field name="total_company_cost"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_l10n_by_payroll_period_form" model="ir.ui.view">
+        <field name="name">l10n.by.payroll.period.form</field>
+        <field name="model">l10n.by.payroll.period</field>
+        <field name="arch" type="xml">
+            <form string="Расчётный период">
+                <header>
+                    <button name="action_populate_employees" type="object"
+                            string="Добавить сотрудников"
+                            invisible="state != 'draft'"/>
+                    <button name="action_compute_all" type="object"
+                            string="Рассчитать всех"
+                            class="oe_highlight"
+                            invisible="state == 'approved'"/>
+                    <button name="action_approve" type="object"
+                            string="Утвердить расчётный период"
+                            class="oe_highlight"
+                            invisible="state != 'computed'"/>
+                    <button name="action_reset_to_draft" type="object"
+                            string="В черновик"
+                            invisible="state != 'computed'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="display_name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="year" readonly="state != 'draft'"/>
+                            <field name="month" readonly="state != 'draft'"/>
+                            <field name="config_id" readonly="state == 'approved'"/>
+                        </group>
+                        <group string="Итоги">
+                            <field name="payslip_count"/>
+                            <field name="total_gross"/>
+                            <field name="total_net"/>
+                            <field name="total_company_cost"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="payslips" string="Расчётные листы">
+                            <field name="payslip_ids" readonly="state == 'approved'">
+                                <list editable="bottom">
+                                    <field name="employee_id"/>
+                                    <field name="salary_amount"/>
+                                    <field name="bonus_amount"/>
+                                    <field name="other_additions" optional="hide"/>
+                                    <field name="other_deductions" optional="hide"/>
+                                    <field name="gross_amount" readonly="1"/>
+                                    <field name="income_tax" readonly="1"/>
+                                    <field name="fszn_employee" readonly="1"/>
+                                    <field name="net_amount" readonly="1" decoration-bf="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_l10n_by_payroll_period" model="ir.actions.act_window">
+        <field name="name">Расчёт зарплаты</field>
+        <field name="res_model">l10n.by.payroll.period</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiley_face">Создайте расчётный период за месяц.</p>
+            <p>Затем добавьте сотрудников, при необходимости внесите премии и нажмите «Рассчитать всех».</p>
+        </field>
+    </record>
+</odoo>

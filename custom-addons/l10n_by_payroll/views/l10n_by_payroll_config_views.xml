@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_by_payroll_config_list" model="ir.ui.view">
+        <field name="name">l10n.by.payroll.config.list</field>
+        <field name="model">l10n.by.payroll.config</field>
+        <field name="arch" type="xml">
+            <list string="Параметры зарплаты РБ">
+                <field name="date_from"/>
+                <field name="income_tax_rate"/>
+                <field name="standard_deduction"/>
+                <field name="standard_deduction_threshold"/>
+                <field name="fszn_employee_rate"/>
+                <field name="fszn_employer_rate"/>
+                <field name="belgosstrah_default_rate"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_l10n_by_payroll_config_form" model="ir.ui.view">
+        <field name="name">l10n.by.payroll.config.form</field>
+        <field name="model">l10n.by.payroll.config</field>
+        <field name="arch" type="xml">
+            <form string="Параметры зарплаты РБ">
+                <sheet>
+                    <group>
+                        <group string="Действие">
+                            <field name="date_from"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Подоходный налог">
+                            <field name="income_tax_rate"/>
+                            <field name="standard_deduction"/>
+                            <field name="standard_deduction_threshold"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Вычеты на иждивенцев и льготы">
+                            <field name="dependent_deduction_one"/>
+                            <field name="dependent_deduction_many"/>
+                            <field name="single_parent_deduction"/>
+                            <field name="disabled_deduction"/>
+                        </group>
+                        <group string="Страховые взносы">
+                            <field name="fszn_employee_rate"/>
+                            <field name="fszn_employer_rate"/>
+                            <field name="belgosstrah_default_rate"/>
+                        </group>
+                    </group>
+                    <group string="Примечание">
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_l10n_by_payroll_config" model="ir.actions.act_window">
+        <field name="name">Параметры зарплаты РБ</field>
+        <field name="res_model">l10n.by.payroll.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiley_face">Создайте набор параметров расчёта.</p>
+            <p>Каждая запись действует с указанной даты. Это позволяет вести историю изменений ставок и пересчитывать прошлые периоды по их параметрам.</p>
+        </field>
+    </record>
+</odoo>

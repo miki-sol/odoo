@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="payroll_config_2026" model="l10n.by.payroll.config">
+        <field name="date_from" eval="'2026-01-01'"/>
+        <field name="income_tax_rate">13.0</field>
+        <field name="standard_deduction">220.0</field>
+        <field name="standard_deduction_threshold">1333.0</field>
+        <field name="dependent_deduction_one">65.0</field>
+        <field name="dependent_deduction_many">130.0</field>
+        <field name="single_parent_deduction">130.0</field>
+        <field name="disabled_deduction">311.0</field>
+        <field name="fszn_employee_rate">1.0</field>
+        <field name="fszn_employer_rate">34.0</field>
+        <field name="belgosstrah_default_rate">0.6</field>
+        <field name="note">Ориентировочные значения 2026 года. Перед использованием в продуктивной системе бухгалтер обязан сверить ставки с Налоговым кодексом РБ и постановлениями Совмина на расчётную дату.</field>
+    </record>
+</odoo>

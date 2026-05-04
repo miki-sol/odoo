@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_by_payslip_list" model="ir.ui.view">
+        <field name="name">l10n.by.payslip.list</field>
+        <field name="model">l10n.by.payslip</field>
+        <field name="arch" type="xml">
+            <list string="Расчётные листы" editable="bottom">
+                <field name="employee_id"/>
+                <field name="salary_amount"/>
+                <field name="bonus_amount"/>
+                <field name="other_additions" optional="hide"/>
+                <field name="other_deductions" optional="hide"/>
+                <field name="gross_amount" readonly="1"/>
+                <field name="total_deductions" readonly="1" optional="hide"/>
+                <field name="taxable_base" readonly="1" optional="hide"/>
+                <field name="income_tax" readonly="1"/>
+                <field name="fszn_employee" readonly="1"/>
+                <field name="net_amount" readonly="1" decoration-bf="1"/>
+                <field name="fszn_employer" readonly="1" optional="hide"/>
+                <field name="belgosstrah" readonly="1" optional="hide"/>
+                <field name="total_company_cost" readonly="1" optional="hide"/>
+                <field name="is_computed" optional="hide"/>
+                <field name="period_state" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_l10n_by_payslip_form" model="ir.ui.view">
+        <field name="name">l10n.by.payslip.form</field>
+        <field name="model">l10n.by.payslip</field>
+        <field name="arch" type="xml">
+            <form string="Расчётный лист">
+                <header>
+                    <button name="action_compute" type="object" string="Пересчитать"
+                            class="oe_highlight" invisible="period_state == 'approved'"/>
+                    <field name="period_state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="period_id" readonly="1"/>
+                            <field name="employee_id" readonly="period_state != 'draft'"/>
+                            <field name="is_computed"/>
+                        </group>
+                        <group string="Исходные данные">
+                            <field name="salary_amount" readonly="period_state == 'approved'"/>
+                            <field name="bonus_amount" readonly="period_state == 'approved'"/>
+                            <field name="other_additions" readonly="period_state == 'approved'"/>
+                            <field name="other_deductions" readonly="period_state == 'approved'"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Начисления и вычеты">
+                            <field name="gross_amount"/>
+                            <field name="standard_deduction_applied"/>
+                            <field name="dependent_deduction_applied"/>
+                            <field name="benefit_deduction_applied"/>
+                            <field name="total_deductions"/>
+                            <field name="taxable_base"/>
+                        </group>
+                        <group string="Налоги и взносы">
+                            <field name="income_tax"/>
+                            <field name="fszn_employee"/>
+                            <field name="fszn_employer"/>
+                            <field name="belgosstrah"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Итог">
+                            <field name="net_amount"/>
+                            <field name="total_company_cost"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_l10n_by_payslip" model="ir.actions.act_window">
+        <field name="name">Расчётные листы</field>
+        <field name="res_model">l10n.by.payslip</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

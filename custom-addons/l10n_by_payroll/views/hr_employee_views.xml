@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_l10n_by_payroll" model="ir.ui.view">
+        <field name="name">hr.employee.form.l10n_by_payroll</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='hr_settings']" position="before">
+                <page name="l10n_by_payroll" string="Зарплата (РБ)" groups="hr.group_hr_user">
+                    <group>
+                        <group string="Начисление">
+                            <field name="l10n_by_salary_amount"/>
+                            <field name="l10n_by_employment_type"/>
+                            <field name="l10n_by_apply_income_tax"/>
+                        </group>
+                        <group string="Вычеты">
+                            <field name="l10n_by_children_under_18"/>
+                            <field name="l10n_by_children_students"/>
+                            <field name="l10n_by_dependents_total"/>
+                            <field name="l10n_by_benefit_category"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Страхование">
+                            <field name="l10n_by_risk_class"/>
+                            <field name="l10n_by_risk_rate_override"/>
+                        </group>
+                        <group string="Выплата и уведомление">
+                            <field name="l10n_by_iban"/>
+                            <field name="l10n_by_payslip_email"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

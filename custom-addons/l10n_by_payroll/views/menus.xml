@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_l10n_by_payroll_root"
+              name="Зарплата (РБ)"
+              sequence="95"
+              groups="hr.group_hr_user"/>
+
+    <menuitem id="menu_l10n_by_payroll_periods"
+              name="Расчёт зарплаты"
+              parent="menu_l10n_by_payroll_root"
+              action="action_l10n_by_payroll_period"
+              sequence="10"/>
+
+    <menuitem id="menu_l10n_by_payroll_payslips"
+              name="Расчётные листы"
+              parent="menu_l10n_by_payroll_root"
+              action="action_l10n_by_payslip"
+              sequence="20"/>
+
+    <menuitem id="menu_l10n_by_payroll_config_root"
+              name="Конфигурация"
+              parent="menu_l10n_by_payroll_root"
+              sequence="90"
+              groups="hr.group_hr_manager"/>
+
+    <menuitem id="menu_l10n_by_payroll_config"
+              name="Параметры зарплаты РБ"
+              parent="menu_l10n_by_payroll_config_root"
+              action="action_l10n_by_payroll_config"
+              sequence="10"/>
+</odoo>
