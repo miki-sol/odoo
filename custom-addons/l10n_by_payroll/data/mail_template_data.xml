@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="mail_template_payslip" model="mail.template">
+        <field name="name">Расчётный лист РБ</field>
+        <field name="model_id" ref="model_l10n_by_payslip"/>
+        <field name="subject">Расчётный лист — {{ object.period_id.display_name }}</field>
+        <field name="email_from">{{ (object.period_id.create_uid.email_formatted or user.email_formatted) }}</field>
+        <field name="email_to">{{ ctx.get('payslip_email_to') or object.employee_id.l10n_by_payslip_email or object.employee_id.work_email }}</field>
+        <field name="report_template_ids" eval="[(4, ref('action_report_payslip'))]"/>
+        <field name="report_name">Payslip_{{ object.employee_id.name }}_{{ object.period_id.display_name }}</field>
+        <field name="body_html" type="html">
+<div style="font-family: Arial, sans-serif;">
+    <p>Здравствуйте, <t t-out="object.employee_id.name"/>!</p>
+    <p>В приложении — расчётный лист за <t t-out="object.period_id.display_name"/>.</p>
+    <p>К выплате: <strong><t t-out="'{:,.2f}'.format(object.net_amount)"/> BYN</strong></p>
+    <p>Если есть вопросы — обратитесь в бухгалтерию.</p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+</odoo>

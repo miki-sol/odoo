@@ -17,6 +17,40 @@
               action="action_l10n_by_payslip"
               sequence="20"/>
 
+    <menuitem id="menu_l10n_by_payroll_wizards"
+              name="Расчёты по среднему"
+              parent="menu_l10n_by_payroll_root"
+              sequence="30"/>
+
+    <menuitem id="menu_l10n_by_payroll_vacation"
+              name="Отпускные"
+              parent="menu_l10n_by_payroll_wizards"
+              action="action_l10n_by_vacation_wizard"
+              sequence="10"/>
+
+    <menuitem id="menu_l10n_by_payroll_sickleave"
+              name="Больничные"
+              parent="menu_l10n_by_payroll_wizards"
+              action="action_l10n_by_sickleave_wizard"
+              sequence="20"/>
+
+    <menuitem id="menu_l10n_by_payroll_reports"
+              name="Отчёты"
+              parent="menu_l10n_by_payroll_root"
+              sequence="40"/>
+
+    <menuitem id="menu_l10n_by_payroll_fot"
+              name="ФОТ за период"
+              parent="menu_l10n_by_payroll_reports"
+              action="action_l10n_by_fot_report"
+              sequence="10"/>
+
+    <menuitem id="menu_l10n_by_payroll_pu3"
+              name="ПУ-3 (квартальная)"
+              parent="menu_l10n_by_payroll_reports"
+              action="action_l10n_by_pu3_wizard"
+              sequence="20"/>
+
     <menuitem id="menu_l10n_by_payroll_config_root"
               name="Конфигурация"
               parent="menu_l10n_by_payroll_root"

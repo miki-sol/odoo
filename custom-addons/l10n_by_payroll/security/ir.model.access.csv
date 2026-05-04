@@ -5,3 +5,9 @@ access_payroll_period_user,payroll.period.user,model_l10n_by_payroll_period,hr.g
 access_payroll_period_manager,payroll.period.manager,model_l10n_by_payroll_period,hr.group_hr_manager,1,1,1,1
 access_payslip_user,payslip.user,model_l10n_by_payslip,hr.group_hr_user,1,1,1,0
 access_payslip_manager,payslip.manager,model_l10n_by_payslip,hr.group_hr_manager,1,1,1,1
+access_vacation_wiz,vacation.wiz,model_l10n_by_vacation_wizard,hr.group_hr_user,1,1,1,1
+access_sickleave_wiz,sickleave.wiz,model_l10n_by_sickleave_wizard,hr.group_hr_user,1,1,1,1
+access_bank_export_wiz,bank.export.wiz,model_l10n_by_bank_export_wizard,hr.group_hr_user,1,1,1,1
+access_pu3_wiz,pu3.wiz,model_l10n_by_pu3_wizard,hr.group_hr_user,1,1,1,1
+access_fot_report_user,fot.report.user,model_l10n_by_fot_report,hr.group_hr_user,1,0,0,0
+access_fot_report_manager,fot.report.manager,model_l10n_by_fot_report,hr.group_hr_manager,1,0,0,0

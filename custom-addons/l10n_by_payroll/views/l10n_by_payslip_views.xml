@@ -4,23 +4,20 @@
         <field name="name">l10n.by.payslip.list</field>
         <field name="model">l10n.by.payslip</field>
         <field name="arch" type="xml">
-            <list string="Расчётные листы" editable="bottom">
+            <list string="Расчётные листы">
                 <field name="employee_id"/>
+                <field name="period_id"/>
+                <field name="worked_days"/>
+                <field name="total_days" optional="hide"/>
                 <field name="salary_amount"/>
                 <field name="bonus_amount"/>
-                <field name="other_additions" optional="hide"/>
-                <field name="other_deductions" optional="hide"/>
                 <field name="gross_amount" readonly="1"/>
-                <field name="total_deductions" readonly="1" optional="hide"/>
-                <field name="taxable_base" readonly="1" optional="hide"/>
                 <field name="income_tax" readonly="1"/>
                 <field name="fszn_employee" readonly="1"/>
                 <field name="net_amount" readonly="1" decoration-bf="1"/>
-                <field name="fszn_employer" readonly="1" optional="hide"/>
-                <field name="belgosstrah" readonly="1" optional="hide"/>
                 <field name="total_company_cost" readonly="1" optional="hide"/>
                 <field name="is_computed" optional="hide"/>
-                <field name="period_state" optional="hide"/>
+                <field name="period_state" optional="show"/>
             </list>
         </field>
     </record>
@@ -33,6 +30,12 @@
                 <header>
                     <button name="action_compute" type="object" string="Пересчитать"
                             class="oe_highlight" invisible="period_state == 'approved'"/>
+                    <button name="action_send_payslip_email" type="object"
+                            string="Отправить на email"
+                            invisible="period_state != 'approved'"/>
+                    <button name="action_view_move" type="object"
+                            string="Проводка"
+                            invisible="not move_id"/>
                     <field name="period_state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -41,15 +44,21 @@
                             <field name="period_id" readonly="1"/>
                             <field name="employee_id" readonly="period_state != 'draft'"/>
                             <field name="is_computed"/>
+                            <field name="move_id" readonly="1"/>
                         </group>
-                        <group string="Исходные данные">
-                            <field name="salary_amount" readonly="period_state == 'approved'"/>
+                        <group string="Табель и оклад">
+                            <field name="full_salary" readonly="period_state == 'approved'"/>
+                            <field name="worked_days" readonly="period_state == 'approved'"/>
+                            <field name="total_days" readonly="1"/>
+                            <field name="salary_amount" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Прочее">
                             <field name="bonus_amount" readonly="period_state == 'approved'"/>
                             <field name="other_additions" readonly="period_state == 'approved'"/>
                             <field name="other_deductions" readonly="period_state == 'approved'"/>
                         </group>
-                    </group>
-                    <group>
                         <group string="Начисления и вычеты">
                             <field name="gross_amount"/>
                             <field name="standard_deduction_applied"/>
@@ -58,20 +67,21 @@
                             <field name="total_deductions"/>
                             <field name="taxable_base"/>
                         </group>
+                    </group>
+                    <group>
                         <group string="Налоги и взносы">
                             <field name="income_tax"/>
                             <field name="fszn_employee"/>
                             <field name="fszn_employer"/>
                             <field name="belgosstrah"/>
                         </group>
-                    </group>
-                    <group>
                         <group string="Итог">
                             <field name="net_amount"/>
                             <field name="total_company_cost"/>
                         </group>
                     </group>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>

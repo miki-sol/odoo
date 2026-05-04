@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_by_fot_report_pivot" model="ir.ui.view">
+        <field name="name">l10n.by.fot.report.pivot</field>
+        <field name="model">l10n.by.fot.report</field>
+        <field name="arch" type="xml">
+            <pivot string="ФОТ за период">
+                <field name="department_id" type="row"/>
+                <field name="month" type="col"/>
+                <field name="gross_amount" type="measure"/>
+                <field name="income_tax" type="measure"/>
+                <field name="fszn_employer" type="measure"/>
+                <field name="belgosstrah" type="measure"/>
+                <field name="net_amount" type="measure"/>
+                <field name="total_company_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_l10n_by_fot_report_graph" model="ir.ui.view">
+        <field name="name">l10n.by.fot.report.graph</field>
+        <field name="model">l10n.by.fot.report</field>
+        <field name="arch" type="xml">
+            <graph string="ФОТ за период" type="bar" stacked="0">
+                <field name="month"/>
+                <field name="total_company_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_l10n_by_fot_report_search" model="ir.ui.view">
+        <field name="name">l10n.by.fot.report.search</field>
+        <field name="model">l10n.by.fot.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="year"/>
+                <filter name="approved" string="Утверждённые" domain="[('state', '=', 'approved')]"/>
+                <group expand="1" string="Группировать по">
+                    <filter name="group_dep" string="Подразделение" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_year" string="Год" context="{'group_by': 'year'}"/>
+                    <filter name="group_month" string="Месяц" context="{'group_by': 'month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_l10n_by_fot_report" model="ir.actions.act_window">
+        <field name="name">Отчёт ФОТ</field>
+        <field name="res_model">l10n.by.fot.report</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="context">{'search_default_approved': 1, 'search_default_group_dep': 1}</field>
+    </record>
+</odoo>

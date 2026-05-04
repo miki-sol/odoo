@@ -35,12 +35,30 @@
                             string="Утвердить расчётный период"
                             class="oe_highlight"
                             invisible="state != 'computed'"/>
+                    <button name="action_print_payslips" type="object"
+                            string="PDF расчётки"
+                            invisible="state == 'draft'"/>
+                    <button name="action_open_bank_export" type="object"
+                            string="Выгрузить ведомость в банк"
+                            invisible="state != 'approved'"/>
+                    <button name="action_open_pu3_export" type="object"
+                            string="ПУ-3 за квартал"
+                            invisible="state != 'approved'"/>
+                    <button name="action_view_moves" type="object"
+                            string="Проводки"
+                            invisible="move_count == 0"/>
                     <button name="action_reset_to_draft" type="object"
                             string="В черновик"
                             invisible="state != 'computed'"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_moves" type="object" class="oe_stat_button"
+                                icon="fa-book" invisible="move_count == 0">
+                            <field name="move_count" widget="statinfo" string="Проводок"/>
+                        </button>
+                    </div>
                     <div class="oe_title">
                         <h1>
                             <field name="display_name" readonly="1"/>
@@ -51,6 +69,7 @@
                             <field name="year" readonly="state != 'draft'"/>
                             <field name="month" readonly="state != 'draft'"/>
                             <field name="config_id" readonly="state == 'approved'"/>
+                            <field name="journal_id" readonly="state == 'approved'"/>
                         </group>
                         <group string="Итоги">
                             <field name="payslip_count"/>
@@ -64,7 +83,10 @@
                             <field name="payslip_ids" readonly="state == 'approved'">
                                 <list editable="bottom">
                                     <field name="employee_id"/>
-                                    <field name="salary_amount"/>
+                                    <field name="worked_days"/>
+                                    <field name="total_days" readonly="1"/>
+                                    <field name="full_salary"/>
+                                    <field name="salary_amount" readonly="1"/>
                                     <field name="bonus_amount"/>
                                     <field name="other_additions" optional="hide"/>
                                     <field name="other_deductions" optional="hide"/>
@@ -77,6 +99,7 @@
                         </page>
                     </notebook>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -85,9 +108,5 @@
         <field name="name">Расчёт зарплаты</field>
         <field name="res_model">l10n.by.payroll.period</field>
         <field name="view_mode">list,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiley_face">Создайте расчётный период за месяц.</p>
-            <p>Затем добавьте сотрудников, при необходимости внесите премии и нажмите «Рассчитать всех».</p>
-        </field>
     </record>
 </odoo>

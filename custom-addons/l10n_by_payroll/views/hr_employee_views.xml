@@ -7,6 +7,16 @@
         <field name="arch" type="xml">
             <xpath expr="//page[@name='hr_settings']" position="before">
                 <page name="l10n_by_payroll" string="Зарплата (РБ)" groups="hr.group_hr_user">
+                    <div class="oe_button_box" name="l10n_by_payroll_actions">
+                        <button name="%(l10n_by_payroll.action_l10n_by_vacation_wizard)d"
+                                type="action" class="btn btn-secondary"
+                                string="Рассчитать отпускные"
+                                context="{'default_employee_id': id}"/>
+                        <button name="%(l10n_by_payroll.action_l10n_by_sickleave_wizard)d"
+                                type="action" class="btn btn-secondary"
+                                string="Рассчитать больничные"
+                                context="{'default_employee_id': id}"/>
+                    </div>
                     <group>
                         <group string="Начисление">
                             <field name="l10n_by_salary_amount"/>

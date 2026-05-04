@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_by_vacation_wizard_form" model="ir.ui.view">
+        <field name="name">l10n.by.vacation.wizard.form</field>
+        <field name="model">l10n.by.vacation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Расчёт отпускных">
+                <group>
+                    <group string="Параметры">
+                        <field name="employee_id"/>
+                        <field name="reference_date"/>
+                        <field name="days"/>
+                    </group>
+                    <group string="Результат">
+                        <field name="average_daily" readonly="1"/>
+                        <field name="total_amount" readonly="1"/>
+                        <field name="months_used" readonly="1"/>
+                        <field name="days_worked" readonly="1"/>
+                    </group>
+                </group>
+                <field name="note" readonly="1" nolabel="1"/>
+                <footer>
+                    <button name="action_compute" type="object" string="Пересчитать"
+                            class="oe_highlight"/>
+                    <button special="cancel" string="Закрыть"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_l10n_by_vacation_wizard" model="ir.actions.act_window">
+        <field name="name">Расчёт отпускных</field>
+        <field name="res_model">l10n.by.vacation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

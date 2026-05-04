@@ -15,15 +15,21 @@ MONTHS = [
 class L10nByPayrollPeriod(models.Model):
     _name = 'l10n.by.payroll.period'
     _description = 'Расчётный период зарплаты РБ'
+    _inherit = ['mail.thread']
     _order = 'year desc, month desc'
     _rec_name = 'display_name'
 
-    year = fields.Integer(string='Год', required=True, default=lambda self: fields.Date.today().year)
+    year = fields.Integer(
+        string='Год', required=True,
+        default=lambda self: fields.Date.today().year,
+        tracking=True,
+    )
     month = fields.Selection(
         MONTHS,
         string='Месяц',
         required=True,
         default=lambda self: str(fields.Date.today().month),
+        tracking=True,
     )
     display_name = fields.Char(compute='_compute_display_name', store=True)
     date_from = fields.Date(compute='_compute_dates', store=True)
@@ -35,6 +41,12 @@ class L10nByPayrollPeriod(models.Model):
         store=True,
         readonly=False,
         help='Автоматически выбирается по дате окончания периода. Можно переопределить вручную.',
+    )
+    journal_id = fields.Many2one(
+        'account.journal',
+        string='Журнал проводок',
+        domain=[('type', '=', 'general')],
+        help='Журнал, в который записываются проводки начисления ЗП при утверждении.',
     )
     state = fields.Selection(
         [('draft', 'Черновик'), ('computed', 'Рассчитан'), ('approved', 'Утверждён')],
@@ -48,6 +60,7 @@ class L10nByPayrollPeriod(models.Model):
         string='Расчётные листы',
     )
     payslip_count = fields.Integer(compute='_compute_totals')
+    move_count = fields.Integer(compute='_compute_move_count')
     total_gross = fields.Float(compute='_compute_totals', string='Итого начислено')
     total_net = fields.Float(compute='_compute_totals', string='Итого к выплате')
     total_company_cost = fields.Float(compute='_compute_totals', string='Итого с расходами компании')
@@ -92,6 +105,11 @@ class L10nByPayrollPeriod(models.Model):
             rec.total_net = sum(rec.payslip_ids.mapped('net_amount'))
             rec.total_company_cost = sum(rec.payslip_ids.mapped('total_company_cost'))
 
+    @api.depends('payslip_ids.move_id')
+    def _compute_move_count(self):
+        for rec in self:
+            rec.move_count = len(rec.payslip_ids.mapped('move_id'))
+
     @api.constrains('year')
     def _check_year(self):
         for rec in self:
@@ -110,8 +128,14 @@ class L10nByPayrollPeriod(models.Model):
         ])
         if not employees:
             raise UserError(_('Нет сотрудников с заполненным окладом, которые ещё не добавлены.'))
+        total_days = calendar.monthrange(self.year, int(self.month))[1]
         self.env['l10n.by.payslip'].create([
-            {'period_id': self.id, 'employee_id': emp.id}
+            {
+                'period_id': self.id,
+                'employee_id': emp.id,
+                'full_salary': emp.l10n_by_salary_amount,
+                'worked_days': total_days,
+            }
             for emp in employees
         ])
 
@@ -135,9 +159,53 @@ class L10nByPayrollPeriod(models.Model):
             if not rec.payslip_ids:
                 raise UserError(_('Нет расчётных листов для утверждения.'))
             rec.state = 'approved'
+            if rec.journal_id:
+                for slip in rec.payslip_ids:
+                    slip._create_journal_entry()
+            rec.payslip_ids.action_send_payslip_email()
 
     def action_reset_to_draft(self):
         for rec in self:
             if rec.state == 'approved':
                 raise UserError(_('Утверждённый период вернуть в черновик нельзя.'))
             rec.state = 'draft'
+
+    def action_print_payslips(self):
+        self.ensure_one()
+        return self.env.ref('l10n_by_payroll.action_report_payslip').report_action(
+            self.payslip_ids
+        )
+
+    def action_view_moves(self):
+        self.ensure_one()
+        moves = self.payslip_ids.mapped('move_id')
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'account.move',
+            'view_mode': 'list,form',
+            'domain': [('id', 'in', moves.ids)],
+            'name': _('Проводки %s', self.display_name),
+        }
+
+    def action_open_bank_export(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'l10n.by.bank.export.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_period_id': self.id},
+        }
+
+    def action_open_pu3_export(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'l10n.by.pu3.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_year': self.year,
+                'default_quarter': str((int(self.month) - 1) // 3 + 1),
+            },
+        }

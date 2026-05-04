@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_payslip" model="ir.actions.report">
+        <field name="name">Расчётный лист</field>
+        <field name="model">l10n.by.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_by_payroll.report_payslip</field>
+        <field name="report_file">l10n_by_payroll.report_payslip</field>
+        <field name="binding_model_id" ref="model_l10n_by_payslip"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_payslip">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Расчётный лист</h2>
+                        <h3 t-out="o.period_id.display_name"/>
+                        <table class="table table-sm">
+                            <tr><td><strong>Сотрудник</strong></td><td t-out="o.employee_id.name"/></tr>
+                            <tr><td>Должность</td><td t-out="o.employee_id.job_title or ''"/></tr>
+                            <tr><td>Период</td>
+                                <td><span t-out="o.period_id.date_from"/> — <span t-out="o.period_id.date_to"/></td>
+                            </tr>
+                            <tr><td>Отработано дней</td>
+                                <td><span t-out="o.worked_days"/> из <span t-out="o.total_days"/></td>
+                            </tr>
+                        </table>
+
+                        <h4>Начисления</h4>
+                        <table class="table table-sm table-bordered">
+                            <tr><td>Оклад (с учётом дней)</td>
+                                <td class="text-end"><span t-out="'{:,.2f}'.format(o.salary_amount)"/></td></tr>
+                            <tr><td>Премия</td>
+                                <td class="text-end"><span t-out="'{:,.2f}'.format(o.bonus_amount)"/></td></tr>
+                            <tr><td>Прочие начисления</td>
+                                <td class="text-end"><span t-out="'{:,.2f}'.format(o.other_additions)"/></td></tr>
+                            <tr class="table-active"><td><strong>Валовая зарплата</strong></td>
+                                <td class="text-end"><strong t-out="'{:,.2f}'.format(o.gross_amount)"/></td></tr>
+                        </table>
+
+                        <h4>Вычеты и облагаемая база</h4>
+                        <table class="table table-sm table-bordered">
+                            <tr><td>Стандартный вычет</td>
+                                <td class="text-end"><span t-out="'{:,.2f}'.format(o.standard_deduction_applied)"/></td></tr>
+                            <tr><td>Вычет на иждивенцев</td>
+                                <td class="text-end"><span t-out="'{:,.2f}'.format(o.dependent_deduction_applied)"/></td></tr>
+                            <tr><td>Льготный вычет</td>
+                                <td class="text-end"><span t-out="'{:,.2f}'.format(o.benefit_deduction_applied)"/></td></tr>
+                            <tr><td><strong>Облагаемая база</strong></td>
+                                <td class="text-end"><strong t-out="'{:,.2f}'.format(o.taxable_base)"/></td></tr>
+                        </table>
+
+                        <h4>Налоги и удержания</h4>
+                        <table class="table table-sm table-bordered">
+                            <tr><td>Подоходный налог</td>
+                                <td class="text-end"><span t-out="'{:,.2f}'.format(o.income_tax)"/></td></tr>
+                            <tr><td>ФСЗН с работника</td>
+                                <td class="text-end"><span t-out="'{:,.2f}'.format(o.fszn_employee)"/></td></tr>
+                            <tr><td>Прочие удержания</td>
+                                <td class="text-end"><span t-out="'{:,.2f}'.format(o.other_deductions)"/></td></tr>
+                            <tr class="table-success"><td><strong>К выплате на руки, BYN</strong></td>
+                                <td class="text-end"><strong t-out="'{:,.2f}'.format(o.net_amount)"/></td></tr>
+                        </table>
+
+                        <h4>Расходы компании (справочно)</h4>
+                        <table class="table table-sm table-bordered">
+                            <tr><td>ФСЗН наниматель</td>
+                                <td class="text-end"><span t-out="'{:,.2f}'.format(o.fszn_employer)"/></td></tr>
+                            <tr><td>Белгосстрах</td>
+                                <td class="text-end"><span t-out="'{:,.2f}'.format(o.belgosstrah)"/></td></tr>
+                            <tr><td><strong>Полная стоимость для компании</strong></td>
+                                <td class="text-end"><strong t-out="'{:,.2f}'.format(o.total_company_cost)"/></td></tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

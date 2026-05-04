@@ -47,6 +47,48 @@ class L10nByPayrollConfig(models.Model):
         help='Применяется, если в карточке сотрудника не указан класс проф. риска со своей ставкой.',
     )
 
+    sick_leave_partial_rate = fields.Float(
+        string='Больничный, первые 12 дней, %',
+        default=80.0,
+    )
+    sick_leave_partial_days = fields.Integer(
+        string='Граница дней для частичной оплаты больничного',
+        default=12,
+    )
+
+    account_salary_expense_id = fields.Many2one(
+        'account.account', string='Счёт расходов на оплату труда',
+        domain=[('account_type', '=', 'expense')],
+    )
+    account_salary_payable_id = fields.Many2one(
+        'account.account', string='Счёт ЗП к выплате',
+        domain=[('account_type', '=', 'liability_payable'), ('reconcile', '=', True)],
+    )
+    account_income_tax_payable_id = fields.Many2one(
+        'account.account', string='Счёт расчётов по подоходному налогу',
+        domain=[('account_type', 'in', ('liability_current', 'liability_non_current'))],
+    )
+    account_fszn_expense_id = fields.Many2one(
+        'account.account', string='Счёт расходов по ФСЗН (наниматель)',
+        domain=[('account_type', '=', 'expense')],
+    )
+    account_fszn_payable_id = fields.Many2one(
+        'account.account', string='Счёт расчётов с ФСЗН',
+        domain=[('account_type', 'in', ('liability_current', 'liability_non_current'))],
+    )
+    account_belgosstrah_expense_id = fields.Many2one(
+        'account.account', string='Счёт расходов Белгосстрах',
+        domain=[('account_type', '=', 'expense')],
+    )
+    account_belgosstrah_payable_id = fields.Many2one(
+        'account.account', string='Счёт расчётов с Белгосстрах',
+        domain=[('account_type', 'in', ('liability_current', 'liability_non_current'))],
+    )
+    account_other_deductions_id = fields.Many2one(
+        'account.account', string='Счёт прочих удержаний',
+        domain=[('account_type', 'in', ('liability_current', 'liability_non_current'))],
+    )
+
     note = fields.Text(string='Примечание')
 
     _sql_constraints = [
@@ -63,11 +105,12 @@ class L10nByPayrollConfig(models.Model):
             )
 
     @api.constrains('income_tax_rate', 'fszn_employee_rate', 'fszn_employer_rate',
-                    'belgosstrah_default_rate')
+                    'belgosstrah_default_rate', 'sick_leave_partial_rate')
     def _check_rates(self):
         for rec in self:
             for field_name in ('income_tax_rate', 'fszn_employee_rate',
-                               'fszn_employer_rate', 'belgosstrah_default_rate'):
+                               'fszn_employer_rate', 'belgosstrah_default_rate',
+                               'sick_leave_partial_rate'):
                 value = rec[field_name]
                 if value < 0 or value > 100:
                     raise ValidationError(_('Ставка должна быть в диапазоне 0–100%.'))
