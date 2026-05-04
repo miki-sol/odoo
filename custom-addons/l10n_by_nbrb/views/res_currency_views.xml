@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_currency_form_l10n_by_nbrb" model="ir.ui.view">
+        <field name="name">res.currency.form.l10n_by_nbrb</field>
+        <field name="model">res.currency</field>
+        <field name="inherit_id" ref="base.view_currency_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Параметры НБ РБ">
+                    <field name="nbrb_cur_id"/>
+                    <field name="nbrb_scale"/>
+                    <button name="action_load_rate_now" type="object"
+                            string="Обновить курс из НБ РБ" class="btn-secondary"
+                            invisible="not nbrb_cur_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_currency_rate_graph" model="ir.ui.view">
+        <field name="name">res.currency.rate.graph.nbrb</field>
+        <field name="model">res.currency.rate</field>
+        <field name="arch" type="xml">
+            <graph string="Динамика курса" type="line">
+                <field name="name"/>
+                <field name="rate" type="measure"/>
+            </graph>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <function model="res.currency" name="write" eval="(
+        ref('base.USD'),
+        {'nbrb_cur_id': 431, 'nbrb_scale': 1, 'active': True}
+    )"/>
+    <function model="res.currency" name="write" eval="(
+        ref('base.EUR'),
+        {'nbrb_cur_id': 451, 'nbrb_scale': 1, 'active': True}
+    )"/>
+    <function model="res.currency" name="write" eval="(
+        ref('base.RUB'),
+        {'nbrb_cur_id': 456, 'nbrb_scale': 100, 'active': True}
+    )"/>
+</odoo>

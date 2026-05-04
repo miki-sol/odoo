@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_l10n_by_nbrb_root"
+              name="Курсы валют (НБ РБ)"
+              sequence="93"
+              groups="account.group_account_user"/>
+
+    <menuitem id="menu_l10n_by_nbrb_rates"
+              name="Курсы валют"
+              parent="menu_l10n_by_nbrb_root"
+              action="action_l10n_by_nbrb_currency_rates"
+              sequence="10"/>
+
+    <menuitem id="menu_l10n_by_nbrb_history_wizard"
+              name="Загрузить за период"
+              parent="menu_l10n_by_nbrb_root"
+              action="action_l10n_by_nbrb_history_wizard"
+              sequence="20"/>
+
+    <menuitem id="menu_l10n_by_nbrb_converter"
+              name="Конвертер валют"
+              parent="menu_l10n_by_nbrb_root"
+              action="action_l10n_by_nbrb_converter_wizard"
+              sequence="30"/>
+
+    <menuitem id="menu_l10n_by_nbrb_log"
+              name="История загрузок"
+              parent="menu_l10n_by_nbrb_root"
+              action="action_l10n_by_nbrb_log"
+              sequence="40"/>
+
+    <menuitem id="menu_l10n_by_nbrb_settings"
+              name="Настройки"
+              parent="menu_l10n_by_nbrb_root"
+              action="action_l10n_by_nbrb_settings"
+              sequence="90"
+              groups="account.group_account_manager"/>
+</odoo>

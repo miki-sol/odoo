@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="l10n_by_nbrb_settings_default" model="l10n.by.nbrb.settings">
+        <field name="auto_update_enabled" eval="True"/>
+        <field name="update_hour">9.0</field>
+        <field name="change_threshold_percent">2.0</field>
+        <field name="retry_count">3</field>
+        <field name="retry_interval_minutes">5</field>
+        <field name="request_timeout_seconds">10</field>
+        <field name="tracked_currency_ids" eval="[(6, 0, [ref('base.USD'), ref('base.EUR'), ref('base.RUB')])]"/>
+    </record>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="mail_template_nbrb_error" model="mail.template">
+        <field name="name">НБ РБ: ошибка загрузки курсов</field>
+        <field name="model_id" ref="model_l10n_by_nbrb_log"/>
+        <field name="subject">Ошибка загрузки курсов НБ РБ — {{ object.run_at and object.run_at.strftime('%d.%m.%Y %H:%M') }}</field>
+        <field name="email_to">{{ ctx.get('error_email_to') }}</field>
+        <field name="body_html" type="html">
+<div>
+    <p>Не удалось загрузить курсы НБ РБ.</p>
+    <p>Дата запуска: <t t-out="object.run_at"/></p>
+    <p>Тип запуска: <t t-out="object.run_type"/></p>
+    <p>Сообщение:</p>
+    <pre t-out="object.message"/>
+    <p>Существующие курсы остаются актуальными до следующей успешной загрузки.</p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+</odoo>

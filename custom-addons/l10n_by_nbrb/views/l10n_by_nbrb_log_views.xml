@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_by_nbrb_log_list" model="ir.ui.view">
+        <field name="name">l10n.by.nbrb.log.list</field>
+        <field name="model">l10n.by.nbrb.log</field>
+        <field name="arch" type="xml">
+            <list string="Журнал загрузок"
+                  decoration-success="state == 'success'"
+                  decoration-warning="state in ('partial', 'skip', 'empty')"
+                  decoration-danger="state == 'error'">
+                <field name="run_at"/>
+                <field name="run_type"/>
+                <field name="target_date"/>
+                <field name="rates_loaded"/>
+                <field name="currency_codes" optional="show"/>
+                <field name="state"/>
+                <field name="message" optional="hide"/>
+                <field name="duration_ms" optional="hide"/>
+                <field name="triggered_by_user_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_l10n_by_nbrb_log_form" model="ir.ui.view">
+        <field name="name">l10n.by.nbrb.log.form</field>
+        <field name="model">l10n.by.nbrb.log</field>
+        <field name="arch" type="xml">
+            <form string="Запись журнала">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="run_at"/>
+                            <field name="run_type"/>
+                            <field name="state"/>
+                            <field name="target_date"/>
+                        </group>
+                        <group>
+                            <field name="rates_loaded"/>
+                            <field name="currency_codes"/>
+                            <field name="duration_ms"/>
+                            <field name="triggered_by_user_id"/>
+                        </group>
+                    </group>
+                    <group string="Сообщение">
+                        <field name="message" nolabel="1"/>
+                    </group>
+                    <group string="Стек ошибки" invisible="not error_traceback">
+                        <field name="error_traceback" nolabel="1" widget="ace"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_l10n_by_nbrb_log_search" model="ir.ui.view">
+        <field name="name">l10n.by.nbrb.log.search</field>
+        <field name="model">l10n.by.nbrb.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="run_type"/>
+                <field name="state"/>
+                <field name="target_date"/>
+                <filter name="errors" string="Только ошибки" domain="[('state', '=', 'error')]"/>
+                <filter name="auto" string="Авто" domain="[('run_type', '=', 'auto')]"/>
+                <filter name="manual" string="Ручные" domain="[('run_type', '=', 'manual')]"/>
+                <group>
+                    <filter name="group_state" string="По результату" context="{'group_by': 'state'}"/>
+                    <filter name="group_type" string="По типу запуска" context="{'group_by': 'run_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_l10n_by_nbrb_log" model="ir.actions.act_window">
+        <field name="name">История загрузок</field>
+        <field name="res_model">l10n.by.nbrb.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

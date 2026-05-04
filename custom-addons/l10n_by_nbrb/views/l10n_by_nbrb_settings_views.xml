@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_by_nbrb_settings_form" model="ir.ui.view">
+        <field name="name">l10n.by.nbrb.settings.form</field>
+        <field name="model">l10n.by.nbrb.settings</field>
+        <field name="arch" type="xml">
+            <form string="Настройки курсов НБ РБ">
+                <header>
+                    <button name="action_update_now" type="object"
+                            string="Обновить курсы сейчас" class="oe_highlight"/>
+                    <button name="action_test_connection" type="object"
+                            string="Проверить соединение"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Автозагрузка">
+                            <field name="auto_update_enabled"/>
+                            <field name="update_hour"/>
+                            <field name="last_success_at" readonly="1"/>
+                        </group>
+                        <group string="Сетевые параметры">
+                            <field name="request_timeout_seconds"/>
+                            <field name="retry_count"/>
+                            <field name="retry_interval_minutes"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Отслеживаемые валюты">
+                            <field name="tracked_currency_ids" widget="many2many_tags"
+                                   nolabel="1" colspan="2"/>
+                        </group>
+                        <group string="Уведомления">
+                            <field name="error_recipient_user_id"/>
+                            <field name="error_recipient_email"/>
+                            <field name="change_threshold_percent"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_l10n_by_nbrb_settings" model="ir.actions.act_window">
+        <field name="name">Настройки курсов НБ РБ</field>
+        <field name="res_model">l10n.by.nbrb.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="res_id" ref="l10n_by_nbrb_settings_default"/>
+    </record>
+
+    <record id="action_l10n_by_nbrb_currency_rates" model="ir.actions.act_window">
+        <field name="name">Курсы валют</field>
+        <field name="res_model">res.currency.rate</field>
+        <field name="view_mode">list,graph,form</field>
+    </record>
+</odoo>

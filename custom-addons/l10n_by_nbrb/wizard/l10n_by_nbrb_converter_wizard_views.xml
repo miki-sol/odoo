@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_by_nbrb_converter_wizard_form" model="ir.ui.view">
+        <field name="name">l10n.by.nbrb.converter.wizard.form</field>
+        <field name="model">l10n.by.nbrb.converter.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Конвертер валют">
+                <group>
+                    <group string="Источник">
+                        <field name="amount_from"/>
+                        <field name="currency_from_id"/>
+                    </group>
+                    <group string="Цель">
+                        <field name="currency_to_id"/>
+                        <field name="rate_date"/>
+                    </group>
+                </group>
+                <group string="Результат" invisible="not currency_from_id or not currency_to_id">
+                    <field name="amount_to" readonly="1"/>
+                    <field name="rate_from_text" readonly="1"/>
+                    <field name="rate_to_text" readonly="1"/>
+                </group>
+                <footer>
+                    <button name="action_compute" type="object" string="Пересчитать"
+                            class="oe_highlight"/>
+                    <button special="cancel" string="Закрыть"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_l10n_by_nbrb_converter_wizard" model="ir.actions.act_window">
+        <field name="name">Конвертер валют</field>
+        <field name="res_model">l10n.by.nbrb.converter.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_nbrb_settings_user,nbrb.settings.user,model_l10n_by_nbrb_settings,base.group_user,1,0,0,0
+access_nbrb_settings_manager,nbrb.settings.manager,model_l10n_by_nbrb_settings,account.group_account_manager,1,1,1,1
+access_nbrb_log_user,nbrb.log.user,model_l10n_by_nbrb_log,base.group_user,1,0,0,0
+access_nbrb_log_manager,nbrb.log.manager,model_l10n_by_nbrb_log,account.group_account_manager,1,1,1,1
+access_nbrb_history_wiz,nbrb.history.wiz,model_l10n_by_nbrb_history_wizard,account.group_account_user,1,1,1,1
+access_nbrb_converter_wiz,nbrb.converter.wiz,model_l10n_by_nbrb_converter_wizard,base.group_user,1,1,1,1
