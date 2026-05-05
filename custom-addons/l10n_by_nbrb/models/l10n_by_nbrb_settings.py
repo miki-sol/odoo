@@ -52,6 +52,16 @@ class L10nByNbrbSettings(models.Model):
         default=10,
     )
     last_success_at = fields.Datetime(string='Последняя успешная загрузка', readonly=True)
+    next_scheduled_at = fields.Datetime(
+        string='Следующее плановое обновление',
+        compute='_compute_next_scheduled_at',
+    )
+
+    def _compute_next_scheduled_at(self):
+        cron = self.env.ref('l10n_by_nbrb.ir_cron_l10n_by_nbrb_update',
+                            raise_if_not_found=False)
+        for rec in self:
+            rec.next_scheduled_at = cron.nextcall if cron and cron.active else False
 
     @api.constrains('update_hour')
     def _check_hour(self):

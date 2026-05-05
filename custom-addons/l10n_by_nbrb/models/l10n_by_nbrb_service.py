@@ -124,7 +124,7 @@ class L10nByNbrbService(models.AbstractModel):
             # чтобы математика в документах не падала на отсутствие записи курса
             # на эту дату. Фактические курсы остаются у предыдущих записей.
             applied = self._apply_fallback_rates(target_currencies, target_date)
-            return Log.create({
+            log = Log.create({
                 'run_type': run_type,
                 'state': 'error',
                 'target_date': target_date,
@@ -136,6 +136,8 @@ class L10nByNbrbService(models.AbstractModel):
                 'error_traceback': err,
                 'duration_ms': int((time.monotonic() - started) * 1000),
             })
+            self._notify_error(log, settings)
+            return log
 
         if not data:
             applied = self._apply_fallback_rates(target_currencies, target_date)
@@ -215,6 +217,9 @@ class L10nByNbrbService(models.AbstractModel):
                 update_vals['nbrb_scale'] = scale
             if not currency.active:
                 update_vals['active'] = True
+            cur_name = row.get('Cur_Name')
+            if cur_name and not currency.full_name:
+                update_vals['full_name'] = cur_name
             if update_vals:
                 currency.write(update_vals)
 
@@ -275,6 +280,26 @@ class L10nByNbrbService(models.AbstractModel):
             })
             applied += 1
         return applied
+
+    def _notify_error(self, log, settings):
+        """Шлёт email о провале загрузки администратору. Не падает наружу."""
+        recipients = []
+        if settings.error_recipient_user_id and settings.error_recipient_user_id.email:
+            recipients.append(settings.error_recipient_user_id.email)
+        if settings.error_recipient_email:
+            recipients.append(settings.error_recipient_email)
+        if not recipients:
+            return
+        template = self.env.ref('l10n_by_nbrb.mail_template_nbrb_error',
+                                raise_if_not_found=False)
+        if not template:
+            return
+        try:
+            template.with_context(
+                error_email_to=','.join(recipients),
+            ).send_mail(log.id, force_send=False)
+        except Exception:
+            _logger.exception('NBRB error notification failed')
 
     def _notify_threshold_breach(self, breach, settings):
         if breach['delta_pct'] < settings.change_threshold_percent:

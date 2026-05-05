@@ -17,6 +17,7 @@
                             <field name="auto_update_enabled"/>
                             <field name="update_hour"/>
                             <field name="last_success_at" readonly="1"/>
+                            <field name="next_scheduled_at" readonly="1"/>
                         </group>
                         <group string="Сетевые параметры">
                             <field name="request_timeout_seconds"/>
