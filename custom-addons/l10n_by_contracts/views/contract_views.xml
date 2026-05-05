@@ -203,7 +203,7 @@
                 <filter name="my" string="Мои" domain="[('user_id','=',uid)]"/>
                 <filter name="active_only" string="Действующие" domain="[('state','=','active')]"/>
                 <filter name="expiring_30" string="Истекают в течение 30 дн."
-                        domain="[('state','=','active'),('days_to_expire','&lt;=',30),('days_to_expire','&gt;=',0)]"/>
+                        domain="[('state','=','active'),('date_end','&gt;=',context_today().strftime('%Y-%m-%d')),('date_end','&lt;=',(context_today() + relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
                 <filter name="sale_side" string="Продажа" domain="[('side','=','sale')]"/>
                 <filter name="purchase_side" string="Закупка" domain="[('side','=','purchase')]"/>
                 <separator/>
@@ -231,6 +231,6 @@
         <field name="name">Срочные действия (истекают)</field>
         <field name="res_model">contract.contract</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('state','=','active'),('days_to_expire','&lt;=',30),('days_to_expire','&gt;=',0)]</field>
+        <field name="domain">[('state','=','active'),('date_end','&gt;=',context_today().strftime('%Y-%m-%d')),('date_end','&lt;=',(context_today() + relativedelta(days=30)).strftime('%Y-%m-%d'))]</field>
     </record>
 </odoo>
