@@ -4,31 +4,35 @@
               name="Курсы НБ РБ"
               parent="account.menu_finance"
               sequence="25"
-              groups="account.group_account_user"/>
+              groups="account.group_account_readonly,account.group_account_invoice"/>
 
     <menuitem id="menu_l10n_by_nbrb_rates"
               name="Курсы валют"
               parent="menu_l10n_by_nbrb_root"
               action="action_l10n_by_nbrb_currency_rates"
-              sequence="10"/>
+              sequence="10"
+              groups="account.group_account_readonly,account.group_account_invoice"/>
 
     <menuitem id="menu_l10n_by_nbrb_history_wizard"
               name="Загрузить за период"
               parent="menu_l10n_by_nbrb_root"
               action="action_l10n_by_nbrb_history_wizard"
-              sequence="20"/>
+              sequence="20"
+              groups="account.group_account_invoice"/>
 
     <menuitem id="menu_l10n_by_nbrb_converter"
               name="Конвертер валют"
               parent="menu_l10n_by_nbrb_root"
               action="action_l10n_by_nbrb_converter_wizard"
-              sequence="30"/>
+              sequence="30"
+              groups="account.group_account_readonly,account.group_account_invoice"/>
 
     <menuitem id="menu_l10n_by_nbrb_log"
               name="История загрузок"
               parent="menu_l10n_by_nbrb_root"
               action="action_l10n_by_nbrb_log"
-              sequence="40"/>
+              sequence="40"
+              groups="account.group_account_readonly,account.group_account_invoice"/>
 
     <menuitem id="menu_l10n_by_nbrb_settings"
               name="Настройки курсов НБ РБ"
