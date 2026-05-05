@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='hr_settings']" position="before">
-                <page name="l10n_by_payroll" string="Зарплата (РБ)" groups="hr.group_hr_user">
+                <page name="l10n_by_payroll" string="Зарплата" groups="hr.group_hr_user">
                     <div class="oe_button_box" name="l10n_by_payroll_actions">
                         <button name="%(l10n_by_payroll.action_l10n_by_vacation_wizard)d"
                                 type="action" class="btn btn-secondary"

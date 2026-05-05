@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <menuitem id="menu_l10n_by_payroll_root"
-              name="Зарплата (РБ)"
+              name="Зарплата"
               sequence="95"
               groups="hr.group_hr_user"/>
 
