@@ -210,12 +210,11 @@
                 <filter name="state_draft" string="Черновики" domain="[('state','=','draft')]"/>
                 <filter name="state_review" string="На согласовании" domain="[('state','=','review')]"/>
                 <filter name="state_expired" string="Истёкшие" domain="[('state','=','expired')]"/>
-                <group string="Группировать">
-                    <filter name="group_partner" string="По контрагенту" context="{'group_by':'partner_id'}"/>
-                    <filter name="group_state" string="По статусу" context="{'group_by':'state'}"/>
-                    <filter name="group_user" string="По менеджеру" context="{'group_by':'user_id'}"/>
-                    <filter name="group_side" string="По стороне" context="{'group_by':'side'}"/>
-                </group>
+                <separator/>
+                <filter name="group_partner" string="По контрагенту" context="{'group_by':'partner_id'}"/>
+                <filter name="group_state" string="По статусу" context="{'group_by':'state'}"/>
+                <filter name="group_user" string="По менеджеру" context="{'group_by':'user_id'}"/>
+                <filter name="group_side" string="По стороне" context="{'group_by':'side'}"/>
             </search>
         </field>
     </record>
