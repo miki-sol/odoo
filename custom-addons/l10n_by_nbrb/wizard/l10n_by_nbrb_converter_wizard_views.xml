@@ -17,8 +17,9 @@
                 </group>
                 <group string="Результат" invisible="not currency_from_id or not currency_to_id">
                     <field name="amount_to" readonly="1"/>
-                    <field name="rate_from_text" readonly="1"/>
-                    <field name="rate_to_text" readonly="1"/>
+                    <field name="rate_text" readonly="1"/>
+                    <field name="rate_from_byn_text" readonly="1" invisible="not rate_from_byn_text"/>
+                    <field name="rate_to_byn_text" readonly="1" invisible="not rate_to_byn_text"/>
                 </group>
                 <footer>
                     <button name="action_compute" type="object" string="Пересчитать"

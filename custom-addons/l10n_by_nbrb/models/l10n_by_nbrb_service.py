@@ -202,9 +202,20 @@ class L10nByNbrbService(models.AbstractModel):
                 continue
             scale = row.get('Cur_Scale') or currency.nbrb_scale or 1
             official = row.get('Cur_OfficialRate')
+            # НБ РБ публикует Cur_OfficialRate = «сколько BYN за Cur_Scale единиц
+            # валюты». Odoo хранит res.currency.rate.rate как «сколько единиц
+            # этой валюты в 1 единице базовой валюты компании» (см.
+            # _compute_current_rate в odoo/addons/base/models/res_currency.py:
+            # currency.rate = stored_currency / stored_base). Если базовая = BYN,
+            # то для корректной конвертации храним обратное значение:
+            # stored_rate = Cur_Scale / Cur_OfficialRate.
             try:
-                rate_value = float(official) / float(scale) if official else EMPTY_RATE_FALLBACK
-            except (TypeError, ValueError):
+                official_f = float(official) if official is not None else 0.0
+                if official_f > 0:
+                    rate_value = float(scale) / official_f
+                else:
+                    rate_value = EMPTY_RATE_FALLBACK
+            except (TypeError, ValueError, ZeroDivisionError):
                 rate_value = EMPTY_RATE_FALLBACK
             if rate_value <= 0:
                 rate_value = EMPTY_RATE_FALLBACK
