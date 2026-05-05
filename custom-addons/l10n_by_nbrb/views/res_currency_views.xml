@@ -17,6 +17,17 @@
         </field>
     </record>
 
+    <record id="view_currency_rate_list_l10n_by_nbrb" model="ir.ui.view">
+        <field name="name">res.currency.rate.list.l10n_by_nbrb</field>
+        <field name="model">res.currency.rate</field>
+        <field name="inherit_id" ref="base.view_currency_rate_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="currency_id"/>
+            </field>
+        </field>
+    </record>
+
     <record id="view_currency_rate_graph" model="ir.ui.view">
         <field name="name">res.currency.rate.graph.nbrb</field>
         <field name="model">res.currency.rate</field>
