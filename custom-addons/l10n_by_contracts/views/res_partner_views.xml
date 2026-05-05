@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_contract" model="ir.ui.view">
+        <field name="name">res.partner.form.contracts</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_open_partner_contracts" icon="fa-file-text-o"
+                        invisible="not is_company">
+                    <field name="contract_count" widget="statinfo" string="Договоры"/>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Реквизиты для договоров" invisible="not is_company">
+                    <group>
+                        <group string="Банк">
+                            <field name="partner_bank_name"/>
+                            <field name="partner_bank_bic"/>
+                        </group>
+                        <group string="Подписант">
+                            <field name="signatory_position"/>
+                            <field name="signatory_name"/>
+                            <field name="signatory_basis"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

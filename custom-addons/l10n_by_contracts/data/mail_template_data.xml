@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="mail_template_contract_expiry" model="mail.template">
+        <field name="name">Договор: уведомление об истечении срока</field>
+        <field name="model_id" ref="model_contract_contract"/>
+        <field name="subject">Договор {{ object.name }} истекает {{ object.date_end and object.date_end.strftime('%d.%m.%Y') }}</field>
+        <field name="email_to">{{ ctx.get('custom_emails') }}</field>
+        <field name="body_html" type="html">
+<div>
+    <p>Добрый день,</p>
+    <p>
+        Договор <strong t-out="object.name"/> с контрагентом <t t-out="object.partner_id.display_name"/>
+        истекает <t t-out="object.date_end and object.date_end.strftime('%d.%m.%Y')"/>
+        (через <t t-out="ctx.get('threshold')"/> дн.).
+    </p>
+    <p>Сумма договора: <t t-out="object.amount"/> <t t-out="object.currency_id.name"/>.</p>
+    <p>Ответственный: <t t-out="object.user_id.name"/></p>
+    <p>
+        <a t-att-href="(object.get_base_url() + '/odoo/contracts/' + str(object.id))">Открыть карточку договора</a>
+    </p>
+    <p>Возможные действия: оформить допсоглашение о продлении, создать новый договор на новый период,
+       или отметить договор как не требующий продления.</p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+</odoo>

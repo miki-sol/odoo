@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_contract_user,contract.user,model_contract_contract,group_contract_user,1,1,1,0
+access_contract_manager,contract.manager,model_contract_contract,group_contract_manager,1,1,1,1
+access_contract_template_user,contract.template.user,model_contract_template,group_contract_user,1,0,0,0
+access_contract_template_manager,contract.template.manager,model_contract_template,group_contract_manager,1,1,1,1
+access_contract_amendment_user,contract.amendment.user,model_contract_amendment,group_contract_user,1,1,1,0
+access_contract_amendment_manager,contract.amendment.manager,model_contract_amendment,group_contract_manager,1,1,1,1

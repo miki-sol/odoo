@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_contract_sale" model="ir.sequence">
+        <field name="name">Договор продажи</field>
+        <field name="code">contract.contract.sale</field>
+        <field name="prefix">ДП-%(year)s-</field>
+        <field name="padding">3</field>
+        <field name="number_increment">1</field>
+        <field name="use_date_range" eval="True"/>
+    </record>
+
+    <record id="seq_contract_purchase" model="ir.sequence">
+        <field name="name">Договор закупки</field>
+        <field name="code">contract.contract.purchase</field>
+        <field name="prefix">ДЗ-%(year)s-</field>
+        <field name="padding">3</field>
+        <field name="number_increment">1</field>
+        <field name="use_date_range" eval="True"/>
+    </record>
+
+    <record id="seq_contract_amendment" model="ir.sequence">
+        <field name="name">Допсоглашение</field>
+        <field name="code">contract.amendment</field>
+        <field name="padding">1</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

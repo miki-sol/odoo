@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_contract_root"
+              name="Договоры"
+              sequence="55"
+              groups="group_contract_user"/>
+
+    <menuitem id="menu_contract_register"
+              name="Реестр договоров"
+              parent="menu_contract_root"
+              action="action_contract"
+              sequence="10"/>
+
+    <menuitem id="menu_contract_expiring"
+              name="Срочные действия"
+              parent="menu_contract_root"
+              action="action_contract_expiring"
+              sequence="20"/>
+
+    <menuitem id="menu_contract_amendments"
+              name="Допсоглашения"
+              parent="menu_contract_root"
+              action="action_contract_amendment"
+              sequence="30"/>
+
+    <menuitem id="menu_contract_config"
+              name="Настройки"
+              parent="menu_contract_root"
+              sequence="90"
+              groups="group_contract_manager"/>
+
+    <menuitem id="menu_contract_templates"
+              name="Шаблоны договоров"
+              parent="menu_contract_config"
+              action="action_contract_template"
+              sequence="10"/>
+</odoo>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_contract_form" model="ir.ui.view">
+        <field name="name">contract.contract.form</field>
+        <field name="model">contract.contract</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_send_for_review" type="object" string="На согласование"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_back_to_draft" type="object" string="Вернуть в черновик"
+                            invisible="state not in ('review','signed_by_us')"/>
+                    <button name="action_sign_by_us" type="object" string="Подписан с нашей стороны"
+                            class="oe_highlight" invisible="state != 'review'"/>
+                    <button name="action_activate" type="object" string="Перевести в «Действует»"
+                            class="oe_highlight" invisible="state not in ('signed_by_us','suspended')"/>
+                    <button name="action_suspend" type="object" string="Приостановить"
+                            invisible="state != 'active'"/>
+                    <button name="action_terminate" type="object" string="Расторгнуть"
+                            invisible="state in ('terminated','expired')"
+                            confirm="Подтвердите расторжение договора."/>
+                    <button name="action_generate_document" type="object" string="Сформировать документ"
+                            class="oe_highlight" icon="fa-file-word-o"
+                            invisible="not template_id"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,review,signed_by_us,active,expired"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart">
+                            <field name="orders_count" string="Заказов" widget="statinfo"/>
+                        </button>
+                        <button name="action_open_invoices" type="object" class="oe_stat_button" icon="fa-pencil-square-o">
+                            <field name="amount_invoiced" string="Счета (сумма)" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="side" widget="radio"/>
+                            <field name="contract_type"/>
+                            <field name="template_id"/>
+                            <field name="partner_id"/>
+                            <field name="user_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="date_signed"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="amount"/>
+                            <field name="currency_id"/>
+                            <field name="payment_terms"/>
+                            <field name="delivery_method"/>
+                            <field name="penalty_rate"/>
+                            <field name="jurisdiction"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Реквизиты сторон">
+                            <group>
+                                <group string="Наша компания">
+                                    <field name="company_id" readonly="1" groups="!base.group_multi_company"/>
+                                    <label for="company_id" string="УНП"/>
+                                    <div><field name="company_id" readonly="1" nolabel="1"/></div>
+                                </group>
+                                <group string="Контрагент">
+                                    <field name="partner_id" readonly="1"/>
+                                </group>
+                            </group>
+                            <p class="text-muted">
+                                Реквизиты заполняются в карточках компании и контрагента.
+                                Используются для подстановки в шаблон при формировании договора.
+                            </p>
+                        </page>
+                        <page string="Связанные документы" name="related">
+                            <group>
+                                <group string="Финансовое исполнение">
+                                    <field name="amount_invoiced"/>
+                                    <field name="amount_paid"/>
+                                    <field name="amount_debt"/>
+                                </group>
+                                <group string="Лимит договора" invisible="contract_type != 'framework'">
+                                    <field name="orders_amount"/>
+                                    <field name="orders_executed_amount"/>
+                                    <field name="orders_in_progress_amount"/>
+                                    <field name="balance_amount"/>
+                                    <field name="balance_pct" widget="percentage"/>
+                                </group>
+                            </group>
+                            <separator string="Заказы"/>
+                            <field name="sale_order_ids" invisible="side != 'sale'" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="date_order"/>
+                                    <field name="state"/>
+                                    <field name="amount_total"/>
+                                </list>
+                            </field>
+                            <field name="purchase_order_ids" invisible="side != 'purchase'" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="date_order"/>
+                                    <field name="state"/>
+                                    <field name="amount_total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Допсоглашения" name="amendments">
+                            <field name="amendment_ids" context="{'default_contract_id': id}">
+                                <list editable="bottom">
+                                    <field name="name" readonly="1"/>
+                                    <field name="subject"/>
+                                    <field name="date_signed"/>
+                                    <field name="state"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Контроль сроков">
+                            <group>
+                                <field name="auto_renew"/>
+                                <field name="auto_renew_period_months" invisible="not auto_renew"/>
+                                <field name="no_renewal_needed"/>
+                                <field name="days_to_expire" readonly="1"/>
+                                <field name="last_notified_threshold" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="Документ договора">
+                            <group>
+                                <field name="generated_document" filename="generated_document_name"/>
+                                <field name="generated_document_name" invisible="1"/>
+                            </group>
+                        </page>
+                        <page string="Заметки">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_contract_list" model="ir.ui.view">
+        <field name="name">contract.contract.list</field>
+        <field name="model">contract.contract</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="expiry_color == 1"
+                  decoration-warning="expiry_color == 2"
+                  decoration-info="expiry_color == 3"
+                  decoration-muted="state in ('terminated','expired')">
+                <field name="name"/>
+                <field name="side"/>
+                <field name="partner_id"/>
+                <field name="contract_type"/>
+                <field name="date_signed"/>
+                <field name="date_end"/>
+                <field name="amount"/>
+                <field name="currency_id"/>
+                <field name="user_id"/>
+                <field name="state"/>
+                <field name="days_to_expire" optional="show" string="Дней до истечения"/>
+                <field name="expiry_color" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_contract_kanban" model="ir.ui.view">
+        <field name="name">contract.contract.kanban</field>
+        <field name="model">contract.contract</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="amount"/>
+                <field name="currency_id"/>
+                <field name="date_end"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div>
+                            <strong><field name="name"/></strong> — <field name="partner_id"/>
+                            <div><field name="amount"/> <field name="currency_id"/></div>
+                            <div t-if="record.date_end.value">до <field name="date_end"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_contract_search" model="ir.ui.view">
+        <field name="name">contract.contract.search</field>
+        <field name="model">contract.contract</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <filter name="my" string="Мои" domain="[('user_id','=',uid)]"/>
+                <filter name="active_only" string="Действующие" domain="[('state','=','active')]"/>
+                <filter name="expiring_30" string="Истекают в течение 30 дн."
+                        domain="[('state','=','active'),('days_to_expire','&lt;=',30),('days_to_expire','&gt;=',0)]"/>
+                <filter name="sale_side" string="Продажа" domain="[('side','=','sale')]"/>
+                <filter name="purchase_side" string="Закупка" domain="[('side','=','purchase')]"/>
+                <separator/>
+                <filter name="state_draft" string="Черновики" domain="[('state','=','draft')]"/>
+                <filter name="state_review" string="На согласовании" domain="[('state','=','review')]"/>
+                <filter name="state_expired" string="Истёкшие" domain="[('state','=','expired')]"/>
+                <group string="Группировать">
+                    <filter name="group_partner" string="По контрагенту" context="{'group_by':'partner_id'}"/>
+                    <filter name="group_state" string="По статусу" context="{'group_by':'state'}"/>
+                    <filter name="group_user" string="По менеджеру" context="{'group_by':'user_id'}"/>
+                    <filter name="group_side" string="По стороне" context="{'group_by':'side'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_contract" model="ir.actions.act_window">
+        <field name="name">Договоры</field>
+        <field name="res_model">contract.contract</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_contract_search"/>
+    </record>
+
+    <record id="action_contract_expiring" model="ir.actions.act_window">
+        <field name="name">Срочные действия (истекают)</field>
+        <field name="res_model">contract.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','=','active'),('days_to_expire','&lt;=',30),('days_to_expire','&gt;=',0)]</field>
+    </record>
+</odoo>

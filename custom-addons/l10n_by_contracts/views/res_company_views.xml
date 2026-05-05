@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_company_form_contracts" model="ir.ui.view">
+        <field name="name">res.company.form.contracts</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="l10n_by_company.view_company_form_by"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='iban']" position="after">
+                <field name="bank_name"/>
+                <field name="bank_bic"/>
+                <field name="director_position"/>
+                <field name="director_name"/>
+                <field name="director_basis"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

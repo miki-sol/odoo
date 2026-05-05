@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_contract_template_form" model="ir.ui.view">
+        <field name="name">contract.template.form</field>
+        <field name="model">contract.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Название шаблона"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="side" widget="radio"/>
+                            <field name="contract_type"/>
+                            <field name="default_payment_terms"/>
+                            <field name="active"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="template_file" filename="template_filename"/>
+                            <field name="template_filename" invisible="1"/>
+                        </group>
+                    </group>
+                    <separator string="Описание"/>
+                    <field name="description"/>
+                    <separator string="Подсказка по переменным шаблона"/>
+                    <div class="alert alert-info" role="alert">
+                        <p>В DOCX-шаблоне используйте плейсхолдеры в формате Jinja2 (docxtpl):</p>
+                        <pre>{{ our_company_name }}, {{ our_unp }}, {{ our_address }}, {{ our_iban }}, {{ our_bank }}, {{ our_bank_bic }},
+{{ our_director_position }}, {{ our_director_name }}, {{ our_director_basis }},
+{{ partner_name }}, {{ partner_unp }}, {{ partner_address }}, {{ partner_iban }}, {{ partner_bank }}, {{ partner_bank_bic }},
+{{ partner_signatory_position }}, {{ partner_signatory }}, {{ partner_basis }},
+{{ contract_number }}, {{ contract_date }}, {{ contract_city }}, {{ date_start }}, {{ date_end }},
+{{ contract_amount }}, {{ contract_amount_words }}, {{ currency }},
+{{ payment_terms }}, {{ delivery_terms }}, {{ penalty_rate }}, {{ jurisdiction }}</pre>
+                        <p>Условные блоки: {% if currency != "BYN" %} ... {% endif %}.</p>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_contract_template_list" model="ir.ui.view">
+        <field name="name">contract.template.list</field>
+        <field name="model">contract.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="side"/>
+                <field name="contract_type"/>
+                <field name="default_payment_terms"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_contract_template" model="ir.actions.act_window">
+        <field name="name">Шаблоны договоров</field>
+        <field name="res_model">contract.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

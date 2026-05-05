@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="tpl_supply_standard" model="contract.template">
+        <field name="name">Договор поставки полиграфической продукции</field>
+        <field name="side">sale</field>
+        <field name="contract_type">supply</field>
+        <field name="default_payment_terms">postpay_14</field>
+        <field name="description">Разовая поставка определённого тиража с конкретной ценой и сроком.</field>
+    </record>
+
+    <record id="tpl_supply_framework" model="contract.template">
+        <field name="name">Рамочный договор поставки</field>
+        <field name="side">sale</field>
+        <field name="contract_type">framework</field>
+        <field name="default_payment_terms">postpay_14</field>
+        <field name="description">Постоянное сотрудничество. Конкретные тиражи оформляются спецификациями.</field>
+    </record>
+
+    <record id="tpl_services" model="contract.template">
+        <field name="name">Договор оказания услуг (печать на материале заказчика)</field>
+        <field name="side">sale</field>
+        <field name="contract_type">services</field>
+        <field name="default_payment_terms">postpay_7</field>
+        <field name="description">Когда печать оформляется как услуга на давальческом материале.</field>
+    </record>
+
+    <record id="tpl_prepay" model="contract.template">
+        <field name="name">Договор с предоплатой 100%</field>
+        <field name="side">sale</field>
+        <field name="contract_type">onetime</field>
+        <field name="default_payment_terms">prepay_100</field>
+        <field name="description">Для новых клиентов или единичных крупных заказов.</field>
+    </record>
+
+    <record id="tpl_purchase_materials" model="contract.template">
+        <field name="name">Договор закупки бумаги/материалов</field>
+        <field name="side">purchase</field>
+        <field name="contract_type">supply</field>
+        <field name="default_payment_terms">postpay_30</field>
+        <field name="description">Закупка бумаги, краски, плёнок у поставщиков.</field>
+    </record>
+
+    <record id="tpl_purchase_equipment" model="contract.template">
+        <field name="name">Договор закупки оборудования</field>
+        <field name="side">purchase</field>
+        <field name="contract_type">onetime</field>
+        <field name="default_payment_terms">prepay_50_50</field>
+        <field name="description">Покупка типографского оборудования, расходников.</field>
+    </record>
+
+    <record id="tpl_rent" model="contract.template">
+        <field name="name">Договор аренды (помещения, оборудования)</field>
+        <field name="side">purchase</field>
+        <field name="contract_type">services</field>
+        <field name="default_payment_terms">postpay_7</field>
+        <field name="description">Аренда производственных площадей или техники.</field>
+    </record>
+</odoo>
