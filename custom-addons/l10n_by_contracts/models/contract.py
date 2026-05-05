@@ -132,9 +132,10 @@ class Contract(models.Model):
     days_to_expire = fields.Integer(compute='_compute_days_to_expire', store=False)
     expiry_color = fields.Integer(compute='_compute_days_to_expire', store=False)
 
-    _sql_constraints = [
-        ('name_company_uniq', 'unique(name, company_id)', 'Номер договора должен быть уникален в рамках компании.'),
-    ]
+    _name_company_uniq = models.Constraint(
+        'unique(name, company_id)',
+        'Номер договора должен быть уникален в рамках компании.',
+    )
 
     # ---------- defaults / sequence ----------
     @api.model_create_multi
@@ -454,11 +455,11 @@ class Contract(models.Model):
         if threshold <= 14:
             director_group = self.env.ref('base.group_erp_manager', raise_if_not_found=False)
             if director_group:
-                users |= director_group.users
+                users |= director_group.user_ids
         if threshold <= 7:
             acc_group = self.env.ref('account.group_account_invoice', raise_if_not_found=False)
             if acc_group:
-                users |= acc_group.users
+                users |= acc_group.user_ids
         return users
 
     def _auto_renew_apply(self):
