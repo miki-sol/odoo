@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <menuitem id="menu_l10n_by_nbrb_root"
-              name="Курсы валют (НБ РБ)"
-              sequence="93"
+              name="Курсы НБ РБ"
+              parent="account.menu_finance"
+              sequence="25"
               groups="account.group_account_user"/>
 
     <menuitem id="menu_l10n_by_nbrb_rates"
@@ -30,7 +31,7 @@
               sequence="40"/>
 
     <menuitem id="menu_l10n_by_nbrb_settings"
-              name="Настройки"
+              name="Настройки курсов НБ РБ"
               parent="menu_l10n_by_nbrb_root"
               action="action_l10n_by_nbrb_settings"
               sequence="90"
