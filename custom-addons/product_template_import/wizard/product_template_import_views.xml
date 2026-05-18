@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_template_import_wizard_form" model="ir.ui.view">
+        <field name="name">product.template.import.wizard.form</field>
+        <field name="model">product.template.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Products">
+                <group invisible="report">
+                    <field name="file" filename="filename"/>
+                    <field name="filename" invisible="1"/>
+                    <field name="has_header"/>
+                </group>
+                <group invisible="not report">
+                    <field name="report" nolabel="1"/>
+                </group>
+                <footer>
+                    <button name="action_import"
+                            string="Import"
+                            type="object"
+                            class="btn-primary"
+                            invisible="report"/>
+                    <button string="Close"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_product_template_import_wizard" model="ir.actions.act_window">
+        <field name="name">Импорт товаров</field>
+        <field name="res_model">product.template.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_view_types">list</field>
+    </record>
+</odoo>
