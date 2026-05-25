@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="mail_template_partner_created" model="mail.template">
+        <field name="name">Уведомление: создан новый контакт</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="subject">Новый контакт: {{ object.name or '' }}</field>
+        <field name="body_html" type="html">
+<div>
+    <p>В системе создан новый контакт.</p>
+    <ul>
+        <li>Наименование: <t t-out="object.name or '—'"/></li>
+        <li>Тип: <t t-out="'Юридическое лицо' if object.company_type == 'company' else 'Физическое лицо'"/></li>
+        <li t-if="object.vat">УНП: <t t-out="object.vat"/></li>
+        <li>Создал: <t t-out="object.create_uid.name or '—'"/></li>
+        <li>Дата и время создания: <t t-out="object.create_date and object.create_date.strftime('%d.%m.%Y %H:%M') or '—'"/></li>
+    </ul>
+    <p>
+        <a t-att-href="object.get_base_url() + '/odoo/contacts/' + str(object.id)">Открыть карточку контакта</a>
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="mail_template_employee_created" model="mail.template">
+        <field name="name">Уведомление: создан новый сотрудник</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="subject">Новый сотрудник: {{ object.name or '' }}</field>
+        <field name="body_html" type="html">
+<div>
+    <p>В системе создана карточка нового сотрудника.</p>
+    <ul>
+        <li>ФИО: <t t-out="object.name or '—'"/></li>
+        <li t-if="object.job_title or object.job_id">Должность: <t t-out="object.job_title or object.job_id.name"/></li>
+        <li t-if="object.department_id">Подразделение: <t t-out="object.department_id.name"/></li>
+        <li t-if="object.parent_id">Руководитель: <t t-out="object.parent_id.name"/></li>
+        <li>Создал: <t t-out="object.create_uid.name or '—'"/></li>
+        <li>Дата и время создания: <t t-out="object.create_date and object.create_date.strftime('%d.%m.%Y %H:%M') or '—'"/></li>
+    </ul>
+    <p>
+        <a t-att-href="object.get_base_url() + '/odoo/employees/' + str(object.id)">Открыть карточку сотрудника</a>
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+</odoo>

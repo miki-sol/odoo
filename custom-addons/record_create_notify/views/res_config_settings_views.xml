@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.record_create_notify</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="90"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Уведомления о записях" string="Уведомления о записях"
+                     name="record_create_notify" logo="/base/static/description/settings.png"
+                     groups="base.group_system">
+                    <block title="Каналы доставки" name="rcn_channels">
+                        <setting string="Внутреннее уведомление (Discuss)"
+                                 help="Сообщение в ленте записи и во входящих Discuss получателя.">
+                            <field name="rcn_channel_internal"/>
+                        </setting>
+                        <setting string="Уведомление по email"
+                                 help="Письмо получателям. Требуется настроенный исходящий почтовый сервер.">
+                            <field name="rcn_channel_email"/>
+                        </setting>
+                    </block>
+                    <block title="Новые контакты" name="rcn_partner">
+                        <setting string="Уведомлять о создании контактов"
+                                 help="Триггер — создание записи res.partner через «Контакты».">
+                            <field name="rcn_partner_enabled"/>
+                            <div class="content-group mt16" invisible="not rcn_partner_enabled">
+                                <div class="d-flex">
+                                    <field name="rcn_skip_child_contacts" class="ml16"/>
+                                    <label for="rcn_skip_child_contacts" class="o_light_label"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Получатели" invisible="not rcn_partner_enabled"
+                                 help="Пользователи, которым направляются уведомления о новых контактах.">
+                            <field name="rcn_partner_user_ids" widget="many2many_tags"/>
+                        </setting>
+                    </block>
+                    <block title="Новые сотрудники" name="rcn_employee">
+                        <setting string="Уведомлять о создании сотрудников"
+                                 help="Триггер — создание записи hr.employee.">
+                            <field name="rcn_employee_enabled"/>
+                        </setting>
+                        <setting string="Получатели (кадры / руководитель)" invisible="not rcn_employee_enabled"
+                                 help="Персональные данные сотрудников направляются только этим лицам.">
+                            <field name="rcn_employee_user_ids" widget="many2many_tags"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
