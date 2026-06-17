@@ -17,6 +17,7 @@
         'mail',
         'contacts',
         'hr',
+        'sale',
     ],
     'data': [
         'data/mail_template_data.xml',

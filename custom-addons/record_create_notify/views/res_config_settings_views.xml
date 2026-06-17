@@ -46,6 +46,16 @@
                             <field name="rcn_employee_user_ids" widget="many2many_tags"/>
                         </setting>
                     </block>
+                    <block title="Новые заказы на продажу" name="rcn_sale_order">
+                        <setting string="Уведомлять о создании заказов на продажу"
+                                 help="Триггер — создание записи sale.order.">
+                            <field name="rcn_sale_order_enabled"/>
+                        </setting>
+                        <setting string="Получатели" invisible="not rcn_sale_order_enabled"
+                                 help="Пользователи, которым направляются уведомления о новых заказах.">
+                            <field name="rcn_sale_order_user_ids" widget="many2many_tags"/>
+                        </setting>
+                    </block>
                 </app>
             </xpath>
         </field>
