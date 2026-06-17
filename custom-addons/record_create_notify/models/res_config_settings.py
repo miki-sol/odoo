@@ -2,6 +2,7 @@ from odoo import api, fields, models
 
 PARTNER_RECIPIENTS_PARAM = 'record_create_notify.partner_user_ids'
 EMPLOYEE_RECIPIENTS_PARAM = 'record_create_notify.employee_user_ids'
+SALE_ORDER_RECIPIENTS_PARAM = 'record_create_notify.sale_order_user_ids'
 
 
 class ResConfigSettings(models.TransientModel):
@@ -16,6 +17,11 @@ class ResConfigSettings(models.TransientModel):
         string='Уведомлять о создании сотрудников',
         default=True,
         config_parameter='record_create_notify.employee_enabled',
+    )
+    rcn_sale_order_enabled = fields.Boolean(
+        string='Уведомлять о создании заказов на продажу',
+        default=True,
+        config_parameter='record_create_notify.sale_order_enabled',
     )
     rcn_channel_internal = fields.Boolean(
         string='Внутреннее уведомление (Discuss)',
@@ -46,6 +52,11 @@ class ResConfigSettings(models.TransientModel):
         help='Персональные данные сотрудников направляются только этим лицам '
              '(руководитель, кадровая служба).',
     )
+    rcn_sale_order_user_ids = fields.Many2many(
+        'res.users',
+        'record_create_notify_sale_order_user_rel', 'config_id', 'user_id',
+        string='Получатели уведомлений о заказах на продажу',
+    )
 
     @api.model
     def get_values(self):
@@ -59,6 +70,7 @@ class ResConfigSettings(models.TransientModel):
         res.update(
             rcn_partner_user_ids=[(6, 0, _ids(PARTNER_RECIPIENTS_PARAM))],
             rcn_employee_user_ids=[(6, 0, _ids(EMPLOYEE_RECIPIENTS_PARAM))],
+            rcn_sale_order_user_ids=[(6, 0, _ids(SALE_ORDER_RECIPIENTS_PARAM))],
         )
         return res
 
@@ -67,3 +79,4 @@ class ResConfigSettings(models.TransientModel):
         params = self.env['ir.config_parameter'].sudo()
         params.set_param(PARTNER_RECIPIENTS_PARAM, ','.join(map(str, self.rcn_partner_user_ids.ids)))
         params.set_param(EMPLOYEE_RECIPIENTS_PARAM, ','.join(map(str, self.rcn_employee_user_ids.ids)))
+        params.set_param(SALE_ORDER_RECIPIENTS_PARAM, ','.join(map(str, self.rcn_sale_order_user_ids.ids)))

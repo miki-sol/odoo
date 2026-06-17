@@ -46,4 +46,27 @@
         <field name="auto_delete" eval="True"/>
     </record>
 
+    <record id="mail_template_sale_order_created" model="mail.template">
+        <field name="name">Уведомление: создан новый заказ на продажу</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="subject">Новый заказ: {{ object.name or '' }}</field>
+        <field name="body_html" type="html">
+<div>
+    <p>В системе создан новый заказ на продажу.</p>
+    <ul>
+        <li>Номер: <t t-out="object.name or '—'"/></li>
+        <li>Клиент: <t t-out="object.partner_id.name or '—'"/></li>
+        <li t-if="object.amount_total">Сумма: <t t-out="object.amount_total"/> <t t-out="object.currency_id.name or ''"/></li>
+        <li t-if="object.user_id">Ответственный: <t t-out="object.user_id.name"/></li>
+        <li>Создал: <t t-out="object.create_uid.name or '—'"/></li>
+        <li>Дата и время создания: <t t-out="object.create_date and object.create_date.strftime('%d.%m.%Y %H:%M') or '—'"/></li>
+    </ul>
+    <p>
+        <a t-att-href="object.get_base_url() + '/odoo/sales/' + str(object.id)">Открыть заказ</a>
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
 </odoo>
