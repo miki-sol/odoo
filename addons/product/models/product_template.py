@@ -254,10 +254,11 @@ class ProductTemplate(models.Model):
             template.product_variant_ids._check_barcode_uniqueness()
 
     @api.depends('company_id')
+    @api.depends_context('company')
     def _compute_currency_id(self):
-        main_company = self.env['res.company']._get_main_company()
+        env_currency_id = self.env.company.currency_id.id
         for template in self:
-            template.currency_id = template.company_id.sudo().currency_id.id or main_company.currency_id.id
+            template.currency_id = template.company_id.sudo().currency_id.id or env_currency_id
 
     @api.depends('company_id')
     @api.depends_context('company')
