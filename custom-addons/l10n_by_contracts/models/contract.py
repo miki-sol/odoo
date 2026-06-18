@@ -52,7 +52,6 @@ class Contract(models.Model):
         string='Номер договора',
         required=True,
         copy=False,
-        readonly=True,
         default=lambda self: _('Новый'),
         tracking=True,
     )
